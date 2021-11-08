@@ -1,0 +1,55 @@
+Simulink permite usar cajas para sumilar distintos modelados y variar
+parametros en ellos pàra ver las salidas
+
+
+help nombreComando
+	Nos da información de una función
+	Tambiñen valo doc. Lo que abre la documentación en la web
+
+	doc nombreComando
+
+Hay un pdf llamado "matlab getting started guide"
+
+PRIMEROS PASOS
+
+	los vectores usan corchetes, tanto por espacios como comas.
+	Un vector columna se define como ; para cada column
+
+	cON DOBLE CLICK En la columna de variables lo veo gráficamente
+
+	Todos los índices empiezan en 1, no en 0
+
+* Matriz(x,y) nos lleva al valor de la fila X y la columna Y
+
+puedo cojer varios  a la vez
+	Matriz (2, [2 3])
+	Matriz (:,2)
+
+-matrces especiales
+	eye_identica
+	ceros
+	one
+
+-trabajo con matrices
+
+*plot
+	Para que se superpongan gráficas entre varias sentencias plot hay que poner hold on
+	
+*legend
+	Es una leyenda, iran atribuyendo el nombre en orden de aparicióin
+
+
+*subplot
+	Nos genera una matriz de figuras
+	subplot(Filas,Columnas, númeroDeFiguraRepresentada)
+
+
+*for i=1:2:20
+	Es esta declaración
+	
+	Break sale del bluce
+	
+	
+	Con return no lee lo de debajo de esa línea
+
+
