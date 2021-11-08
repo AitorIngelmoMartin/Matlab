@@ -1,16 +1,17 @@
-function [out] = operacionesMatriz(Matriz_A, Matriz_B)
+function [] = operacionesMatriz(Matriz_A, Matriz_B)
 
-msg = 'Hay un error de compatibilidad de matrices';
+msgError = 'Hay un error de compatibilidad con las matrices';
 Tamano1 = size(Matriz_A);
 Tamano2 = size(Matriz_B);
 
 if((Tamano1(1,1))<(Tamano2(1,1)))
-error(msg)
+error(msgErrpr)
 end
 
 %Mostrar matrices introducidad
 disp(Matriz_A)
 disp(Matriz_B)
+
 %Transposición de las matrices
 
 Transpuesta_A = transpose(Matriz_A)
