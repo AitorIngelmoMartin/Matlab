@@ -1,0 +1,3 @@
+Condensador : 861020786030
+
+Bobina 26uH: 744150 
