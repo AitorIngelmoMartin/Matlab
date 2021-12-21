@@ -60,3 +60,6 @@ Condensador = Capacitancia;
 
 % Porcentaje de trabajo diapositiva 12/43 dc-dc boost
 porcentaje_trabajo = (1-Dmax)/12;
+
+
+    
