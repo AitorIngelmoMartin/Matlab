@@ -30,8 +30,8 @@ Wa_radianes=Wa/pi;
 Fd = 1/Td;
 
 [N,wc]=buttord(Wp_radianes,Wa_radianes,alfa_a,alfa_p,"s");
-[B,A]=butter(N,wc,"s");
-[Bz,Az]=bilinear(B,A,Fd);
+[B,A]=butter(N,wc,"s"); %Coeficientes Ak y Bk del filtro en el tiempo
+[Bz,Az]=bilinear(B,A,Fd); %En Zeta
 
 figure(1);title("Representación polos/ceros Hd(z)");
 zplane(Bz,Az);
