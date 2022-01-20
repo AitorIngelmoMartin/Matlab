@@ -6,16 +6,16 @@
 % Transformer lengths = lambda/4
 % Fo=1000 Mhz
 % Plot 1 to 4000 MHz
-%clc;
-%close all;
+% clc;
+% close all;
 
-Zload=150;  % Load impedance, to matched (Ohms)
+Zload=75;  % Load impedance, to matched (Ohms)
 Zo=50;      % Characteristic impedance to match to (Ohms)
 Fo=1000;    % Centre frequency (MHz)
 F1=1;       % Start frequency for response plot (MHz)
 F2=4000;    % Stop frequency for response plot (MHz) 
 Tlen=0.25;  % Transformer length as a fraction of wavelength
-N=3;        % Number of transformer sections 
+N=5;        % Number of transformer sections 
 
 Er=3.48;    % Dielectric constant for microstrip
 d=1.52;     % Thickness of substrate (mm)
