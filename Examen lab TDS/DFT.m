@@ -25,3 +25,16 @@ x3 = desplazamientoPeriodico(x0,3,6);
 x4 = desplazamientoPeriodico(x0,4,6);
 
 x = xo+x1+x2+x3+x4
+
+
+
+
+
+
+
+h = [8 7 14 15 3 9 8 12 13 14];
+j = [7 14 15 3 9 8 12 13 14 0];
+
+k = h.*j
+
+k = sum(k)
