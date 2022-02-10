@@ -4,7 +4,7 @@ I0= 1;
 V0max=24;
 VOmin =5;
 
-VINmin = 5
+VINmin = 5;
 
 Dmax = (V0max-VINmin)/V0max;
 IL = I0/(1-Dmax);
