@@ -132,15 +132,16 @@ BOC=design(horn,frec);
 BOC.Tilt=90;
 BOC.TiltAxis=[0 1 0];
 
-PBL=design(reflectorParabolic,frec);
-PBL.Exciter=BOC;
-PBL.Tilt=90;
-PBL.TiltAxis=[0 1 0];
-PBL.Radius=0.6/2;
-PBL.FocalLength=(2*PBL.Radius);
-estudiar_antena_incompleto(PBL,frec,'V')
+% PBL=design(reflectorParabolic,frec);
+% PBL.Exciter=BOC;
+% PBL.Tilt=90;
+% PBL.TiltAxis=[0 1 0];
+% PBL.Radius=0.6/2;
+% PBL.FocalLength=(2*PBL.Radius);
+% estudiar_antena_incompleto(PBL,frec,'V')
 
 %% EJ 6.2
+% 
 PBL2=design(reflectorParabolic,frec);
 PBL2.Exciter=BOC;
 PBL2.Tilt=90;
@@ -151,5 +152,5 @@ estudiar_antena_incompleto(PBL2,frec,'V')
 
 %% EJ 6.3
 close all
-xpd_antena_soluciones(PBL, frec, -180:180,0);
+xpd_antena(PBL, frec, -180:180);
 
