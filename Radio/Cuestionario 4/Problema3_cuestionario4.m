@@ -66,7 +66,7 @@ if(Phi>=Phi_lim)
     else
         Dcaminos =sqrt( Distancia*Distancia + abs(H1+H2)^2 ) - sqrt( Distancia*Distancia + abs(H1-H2)^2 );
         
-        Divergencia = (1 + (5/(16*K)*((d2*d1*d1)/(Distancia*H1))))^(-1/2);
+        Divergencia = ( 1 + (5*(d1/1000*d1/1000*d2/1000)/(16*K*(Distancia/1000)*H1)) )^(-0.5)
         Refectivo = Rv*Divergencia*exp(-((Rugosidad*Rugosidad)/2))
         exponente = (-1i*(((2*pi)/lambda))*Dcaminos);
         Lref_dB   = -20*log10(norm( 1 + (Refectivo*exp(exponente)) )) 
