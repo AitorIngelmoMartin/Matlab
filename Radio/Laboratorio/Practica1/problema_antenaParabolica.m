@@ -22,22 +22,22 @@ Prx_dBw = 10*log10(Prx_w);
 
 Lbf_dB =20*log10((4*pi*Distancia)/lambda);
 
-
 Ptx_dBw = Prx_dBw - G - G + Lbf_dB;
 
 PIRE_dB = Ptx_dBw + G;
 PIRE_w = 10^(PIRE_dB/10);
 Flujo =PIRE_w/(4*pi*Distancia*Distancia);
 
-e = (Flujo * 120 * pi)^(1/2);
+e = sqrt(Flujo * 120 * pi);
+e_dBu = 20*log10(e*1e6);
 
 % Determinar la potencia recibida en caso de que ese valor de campo llegara a la
 % antena en polarización horizontal.
 
-XPD_dB = 63,6172;
+XPD_dB = 63.6172;
 G_contrapolar_dB = G - XPD_dB;
 
-Flujo_contrapolar = ((e*e)/(120*pi*4*pi*Distancia*Distancia));%El mísmo que antes
+Flujo_contrapolar = Flujo;
 
 PIRE_contrapolar = Flujo_contrapolar * (4*pi*Distancia*Distancia);
 PIRE_contrapolar_dB = 10*log10(PIRE_contrapolar);
