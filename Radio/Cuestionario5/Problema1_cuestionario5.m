@@ -1,5 +1,5 @@
 clc;clear;close all;
-f = 2500000000;
+f = 2.5e9;
 c=3e8;
 lambda= c/f;
 Lt_dB = 3;
@@ -10,7 +10,7 @@ h1 = 8;
 h2 = 22;
 Distancia = 13000;
 R0 =6370000;
-Gmax_dB = 34;
+Gmax_dB = 34-13;
 Gmax = 10^(Gmax_dB/10);
 Re = -0.8628;%Coeficiente de reflexion efectivo
 
@@ -50,7 +50,7 @@ H2 = h2 - (d2^2)/(2*K*R0);
 H1 = h1 - (d1^2)/(2*K*R0);
 
 Phi = atan(H1/d1);
-Phi_lim = (1/1000)*(5400/(f/1000))^(1/3);
+Phi_lim =(1/1000)*(5400/(f/1000))^(1/3);
 % -----------------------------------------------------------------
 
 
@@ -61,8 +61,7 @@ if(Phi>=Phi_lim)
         Raiz1       = sqrt( Distancia*Distancia + abs(H1+H2)^2 );
         Raiz2       = sqrt( Distancia*Distancia + abs(H1-H2)^2 );
         Dcaminos    = Raiz1 - Raiz2;
-        Divergencia = ( 1 + (5*(d1/1000*d1/1000*d2/1000)/(16*K*(Distancia/1000)*H1)) )^(-0.5);
-        Refectivo   = Re*Divergencia;
+        Refectivo   = Re;
         exponente   = (-1i*(((2*pi)/lambda))*Dcaminos);
         Lref_dB     = -20*log10(norm( 1 + (Refectivo*exp(exponente)) )) ;
 
@@ -71,19 +70,20 @@ else
     "Hay pérdidas por difracción"
 end
 % -------------------------------------------------------------------------
-
-e_rx_dBu = 71.2;
-e_V = (10^(e_rx_dBu/20))/1000000
-
-flujo = (e_V*e_V)/(120*pi)
-PIRE = flujo*(4*pi*Distancia*Distancia)
-
-Ptx_w = (PIRE*Lt)/Gmax
-
 Lbf_dB = 20*log10((4*pi*Distancia)/lambda);
 
 Lad_dB = Lbf_dB + Lref_dB;
 Lad    = 10^(Lad_dB/10);
+
+e_rx_dBu = 71.2;
+e_V      = (10^(e_rx_dBu/20))*1e-6;
+
+flujo    = (e_V*e_V)/(120*pi);
+PIRE     = flujo*(4*pi*Distancia*Distancia);
+PIRE_dBw = 10*log10(PIRE)
+
+Ptx_w = (PIRE*Lt)/Gmax
+
 
 
 
