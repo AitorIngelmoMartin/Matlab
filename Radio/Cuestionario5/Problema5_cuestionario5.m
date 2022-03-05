@@ -1,6 +1,6 @@
 clear;close all;clc;
 
-numero_obstaculos = 2;
+
 f = 23e9;
 c=3e8;
 lambda= c/f;
@@ -32,9 +32,8 @@ DobsA_1 = 15000;
 DobsA_2 = Distancia - DobsA_1;
 e_A  = 261;
 
+
 Flecha_A = (DobsA_1*DobsA_2)/(2*K*R0);
-
-
 
 AlturaRayo_A = ((h2-h1)/Distancia)*DobsA_1 + h1;
 
