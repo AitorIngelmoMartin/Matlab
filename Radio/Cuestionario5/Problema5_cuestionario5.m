@@ -32,13 +32,13 @@ DobsA_1 = 15000;
 DobsA_2 = Distancia - DobsA_1;
 e_A  = 261;
 
-b_A = (DobsA_1*DobsA_2)/(2*K*R0);
+Flecha_A = (DobsA_1*DobsA_2)/(2*K*R0);
 
-Flecha_A = b_A + e_A;
+
 
 AlturaRayo_A = ((h2-h1)/Distancia)*DobsA_1 + h1;
 
-Despejamiento_A = Flecha_A-AlturaRayo_A;
+Despejamiento_A = Flecha_A + e_A-AlturaRayo_A;
 
 Rfresnell_A = sqrt((lambda*DobsA_1*DobsA_2)/(DobsA_1+DobsA_2))
 
@@ -51,37 +51,37 @@ DobsB_1  = 29000;
 DobsB_2  = Distancia - DobsB_1;
 e_B   = 239;
 
-b_B = (DobsB_1*DobsB_2)/(2*K*R0);
-
-Flecha_B = b_B + e_B;
+Flecha_B = (DobsB_1*DobsB_2)/(2*K*R0);
 
 AlturaRayo_B = ((h2-h1)/Distancia)*DobsB_1 + h1;
 
-Despejamiento_B = Flecha_B-AlturaRayo_B;
+Despejamiento_B = Flecha_B + e_B-AlturaRayo_B;
 
 Rfresnell_B = sqrt((lambda*DobsB_1*DobsB_2)/(DobsB_1+DobsB_2))
 
 Difracc_B   = sqrt(2)*(Despejamiento_B/Rfresnell_B)
 %--------------------
-
-if(numero_obstaculos>=2)
-    
-    if( ( (Difracc_A<0) ||(Difracc_B<0) ) && (abs(Difracc_A -Difracc_B)<0.5) )
+if( ( (Difracc_A<0) ||(Difracc_B<0) ) && (abs(Difracc_A -Difracc_B)<0.5) )
         "Método uno"
         
-    end
+end
 
-    if( ( (Difracc_A>0) && (Difracc_B>0) ) && (abs(Difracc_A -Difracc_B)>0.5) )
+if( ( (Difracc_A>0) && (Difracc_B>0) ) && (abs(Difracc_A -Difracc_B)>0.5) )
         "Método dos"
-        
-    end
-
 end
 
 
+Ldif1 = 6.9 + 20*log10(sqrt( (Difracc_A -0.1)^2 +1) + Difracc_A -0.1)
 
 
+h1 = e_A;
+Dentre_obs = 29-15;
 
+Rfresnell_B = sqrt((lambda*Dentre_obs*DobsB_2)/(Dentre_obs+DobsB_2))
+
+Difracc_B   = sqrt(2)*(Despejamiento_B/Rfresnell_B)
+
+Ldif1 = 6.9 + 20*log10(sqrt( (Difracc_B -0.1)^2 +1) + Difracc_B -0.1)
 
 
 
