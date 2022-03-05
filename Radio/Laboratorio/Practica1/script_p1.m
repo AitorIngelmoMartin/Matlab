@@ -132,13 +132,13 @@ BOC=design(horn,frec);
 BOC.Tilt=90;
 BOC.TiltAxis=[0 1 0];
 
-PBL=design(reflectorParabolic,frec);
-PBL.Exciter=BOC;
-PBL.Tilt=90;
-PBL.TiltAxis=[0 1 0];
-PBL.Radius=0.6/2;
-PBL.FocalLength=(2*PBL.Radius);
-estudiar_antena_incompleto(PBL,frec,'V')
+% PBL=design(reflectorParabolic,frec);
+% PBL.Exciter=BOC;
+% PBL.Tilt=90;
+% PBL.TiltAxis=[0 1 0];
+% PBL.Radius=0.6/2;
+% PBL.FocalLength=(2*PBL.Radius);
+% estudiar_antena_incompleto(PBL,frec,'V')
 
 %% EJ 6.2
 % 

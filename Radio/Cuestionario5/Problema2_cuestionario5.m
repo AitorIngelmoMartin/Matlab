@@ -9,8 +9,8 @@ G_dB = 27;
 Epsilon_relativa = 15;
 Conductividad=0.001;
 Polarizacion = "horizontal";
-h1 = 9;
-h2 = 4;
+h1 = 10;
+h2 = 8;
 Distancia = 21000;
 R0 =6370000;
 
@@ -49,7 +49,7 @@ H2 = h2 - (d2^2)/(2*K*R0);
 H1 = h1 - (d1^2)/(2*K*R0);
 
 Phi = atan(H1/d1);
-Phi_lim =(1/1000)*(5400/(f/1000))^(1/3);
+Phi_lim =(5400/(f/1000))^(1/3);
 
 if(Phi>=Phi_lim)
  %Código ejecutado si hay reflexión -> MTC
@@ -60,11 +60,33 @@ else
     R=K*R0;
     
     if(Polarizacion == "horizontal")
-       Beta = 1;
-       X = Beta * ((pi/(lambda*R*R))^(1/3))*Distancia;
-       Y2=2*Beta* (((pi*pi)/(lambda*lambda*R))^(1/3))*h2
+       X = ((pi/(lambda*R*R))^(1/3))*Distancia;
+       Y2=2*(((pi*pi)/(lambda*lambda*R))^(1/3))*h2
+       Y1=2*(((pi*pi)/(lambda*lambda*R))^(1/3))*h1
+       if(X>=1.6)
+          F = 11 + log10(X) -17.6*X
+       else
+          F = -20*log10(X) - 5.6488*(X^(1.425))
+       end
        
+       if(Y1>2)
+          G1 = 17.6*sqrt(Y2-1.1) -5*log10(Y2-1.1) -8          
+       else
+          G1 = 20*log10(Y1+0.1*Y1*Y1*Y1)
+       end
+              if(G1<(2 +20*log10(K)))
+                G1 = 2 +20*log10(K);
+              end
+       if(Y2>2)
+          G2 = 17.6*sqrt(Y1-1.1) -5*log10(Y-1.1) -8          
+       else
+          G2 = 20*log10(Y2+0.1*Y2*Y2*Y2)
+       end
+              if(G2<(2 +20*log10(K)))
+                G2 = 2 +20*log10(K);
+              end
        
+    Ldif_dB = -F -G1 -G2   
     end
     
     Ldif_dB =0;
@@ -73,7 +95,7 @@ end
 % -------------------------------------------------------------------------
 
 PIRE_dBw = Ptx_dBw + G_dB;
-Lbf_dB = 20*log10((4*pi*Distancia*Distancia)/lambda);
+Lbf_dB = 20*log10((4*pi*Distancia)/lambda);
 Lad_dB =Lbf_dB + Ldif_dB;
 Prx_dBw = PIRE_dBw - Lad_dB + G_dB;
 
