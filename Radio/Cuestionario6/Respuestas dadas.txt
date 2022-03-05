@@ -11,3 +11,29 @@ SOLUCIÓN:
 
 Como F_001 tiene un valor de2.3131 dB, significa que al menos durante una hora al año la lluvia va a generar una atenuación superior a este valor.
 No obstante, como el margen dinámico es mayor a este valor, significa que el enlace estará protegido el 100% de las veces a lo largo del año.
+
+PROBLEMA3
+Valores intermedio-----
+Lespecifica_lluvia =  1.4545 dB/Km
+
+hr =  2.6900 Km
+
+Ls =   2.8066e+03
+
+Lg = -1.5765e+03
+
+r_001 =   0  (me sale 1/inf, por lo que matlab lo asume 0)
+
+Lr =   2.8066e+03
+
+V_001 =    1.6929
+
+Deff =    4.7514 Km
+
+F_001 =    6.9109 dB
+-------------------------
+
+SOLUCIÓN:
+
+Tras hacer todos los cálculos, se ha obtenido que F_001 = 6.9109. Esto significa, que al menos durante una hora al año la lluvia va a causar unas pérdidas de valor 6.9109 dB. 
+(Como además es el caso horizontal, es el valor más pesimista posible, en polarización horizontal siempre se obtiene menos atenuación)

@@ -1,86 +1,82 @@
 clear;close all;clc;
 
-
-f = 23e9;
-c=3e8;
-lambda= c/f;
-R0 =6370000;
-K = 4/3;
-
-
+f  = 23e9;
+c  = 3e8;
+R0 = 6370000;
+K  = 4/3;
 h1 = 300;
 h2 = 240;
+lambda    = c/f;
 Distancia = 38000;
 
-% -------------------------------------------------------------------------
-
-termino1 = K*R0+h1;termino2= K*R0;termino3 = K*R0+h2;termino4 = K*R0;
-Dmax = sqrt(termino1^2 - termino2^2)+sqrt(termino3^2 - termino4^2);
-
-if(Distancia<0.1*Dmax) 
-    %Código ejecutado si tierra plana
-    "Tierra plana"
-else
-    %Código ejecutado si tierra curva
-    "Tierra curva"
-end
-
-% -------------------------------------------------------------------------
 
 %OBSTACULO A---------
-DobsA_1 = 15000;
-DobsA_2 = Distancia - DobsA_1;
-e_A  = 261;
+Distancia_E1_O1 = 15000;
+Distancia_E2_O1 = Distancia - Distancia_E1_O1;
+e_O1            = 261;
 
+Flecha_O1        = (Distancia_E1_O1*Distancia_E2_O1)/(2*K*R0);
 
-Flecha_A = (DobsA_1*DobsA_2)/(2*K*R0);
+AlturaRayo_O1    = ((h2-h1)/Distancia)*Distancia_E1_O1 + h1;
 
-AlturaRayo_A = ((h2-h1)/Distancia)*DobsA_1 + h1;
+Despejamiento_O1 = Flecha_O1 + e_O1-AlturaRayo_O1;
 
-Despejamiento_A = Flecha_A + e_A-AlturaRayo_A;
+Rfresnell_O1 = sqrt((lambda*Distancia_E1_O1*Distancia_E2_O1)/(Distancia_E1_O1+Distancia_E2_O1))
 
-Rfresnell_A = sqrt((lambda*DobsA_1*DobsA_2)/(DobsA_1+DobsA_2))
+Difracc_O1   = sqrt(2)*(Despejamiento_O1/Rfresnell_O1)
 
-Difracc_A   = sqrt(2)*(Despejamiento_A/Rfresnell_A)
-
-%--------------------
 
 %OBSTACULO B---------
-DobsB_1  = 29000;
-DobsB_2  = Distancia - DobsB_1;
-e_B   = 239;
+Distancia_E1_O2  = 29000;
+Distancia_E2_O2  = Distancia - Distancia_E1_O2;
+e_O2             = 239;
 
-Flecha_B = (DobsB_1*DobsB_2)/(2*K*R0);
+Flecha_O2        = (Distancia_E1_O2*Distancia_E2_O2)/(2*K*R0);
 
-AlturaRayo_B = ((h2-h1)/Distancia)*DobsB_1 + h1;
+AlturaRayo_O2    = ((h2-h1)/Distancia)*Distancia_E1_O2 + h1;
 
-Despejamiento_B = Flecha_B + e_B-AlturaRayo_B;
+Despejamiento_O2 = Flecha_O2 + e_O2-AlturaRayo_O2;
 
-Rfresnell_B = sqrt((lambda*DobsB_1*DobsB_2)/(DobsB_1+DobsB_2))
+Rfresnell_O2 = sqrt((lambda*Distancia_E1_O2*Distancia_E2_O2)/(Distancia_E1_O2+Distancia_E2_O2));
 
-Difracc_B   = sqrt(2)*(Despejamiento_B/Rfresnell_B)
+Difracc_O2   = sqrt(2)*(Despejamiento_O2/Rfresnell_O2);
 %--------------------
-if( ( (Difracc_A<0) ||(Difracc_B<0) ) && (abs(Difracc_A -Difracc_B)<0.5) )
+
+if( ( (Difracc_O1<0) ||(Difracc_O2<0) ) && (abs(Difracc_O1 -Difracc_O2)<0.5) )
         "Método uno"
         
 end
 
-if( ( (Difracc_A>0) && (Difracc_B>0) ) && (abs(Difracc_A -Difracc_B)>0.5) )
+if( ( (Difracc_O1>0) && (Difracc_O2>0) ) && (abs(Difracc_O1 -Difracc_O2)>0.5) )
         "Método dos"
+        
+        Dentre_obs             = (29-15)*1000;
+
+        Flecha_02_prima        = (Dentre_obs*Distancia_E2_O2)/(2*K*R0);
+
+        e_O2_prima             = ((h2-e_O1)*Dentre_obs/Distancia_E2_O1)+e_O1;
+
+        Despejamiento_O2_prima = Flecha_02_prima+e_O2-e_O2_prima;
+
+        Rfresnell_O2_prima     = sqrt(lambda*((Dentre_obs*Distancia_E2_O2)/(Dentre_obs+Distancia_E2_O2)));
+
+        Difracc_O2_prima       = sqrt(2)*(Despejamiento_O2_prima/Rfresnell_O2_prima);
+
+        Alpha         = atan(((Distancia*Dentre_obs)/(Distancia_E1_O1*Distancia_E2_O2))^(1/2));
+
+        Ldif_V1       = 6.9 + 20*log10(sqrt( (Difracc_O1      -0.1)^2 +1) + Difracc_O1      -0.1);
+        Ldif_V2_prima = 6.9 + 20*log10(sqrt(((Difracc_O2_prima-0.1)^2)+1) + Difracc_O2_prima-0.1);
+
+        Tc            =(12 - 20*log10(2/(1 - (Alpha/pi))))*((Difracc_O2/Difracc_O1)^(2*Difracc_O1));
+
+        Lad=Ldif_V1+Ldif_V2_prima-Tc
 end
 
 
-Ldif1 = 6.9 + 20*log10(sqrt( (Difracc_A -0.1)^2 +1) + Difracc_A -0.1)
 
 
-h1 = e_A;
-Dentre_obs = 29-15;
 
-Rfresnell_B = sqrt((lambda*Dentre_obs*DobsB_2)/(Dentre_obs+DobsB_2))
 
-Difracc_B   = sqrt(2)*(Despejamiento_B/Rfresnell_B)
-
-Ldif1 = 6.9 + 20*log10(sqrt( (Difracc_B -0.1)^2 +1) + Difracc_B -0.1)
 
 
 

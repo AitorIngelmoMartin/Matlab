@@ -5,8 +5,11 @@ f  = 14e9;
 c  = 3e8;
 R0 = 6370000;
 K  = 0.0374;
-h2 = 368;
+Re = K*R0;
+hs = 368;
 h0 = 2.33; %Km
+Lat  = 36.71;
+Long = 5.7;
 Angulo_elev = 27.3; %Grados
 lambda      = c/f;
 Distancia   = 38920; % Km
@@ -20,4 +23,35 @@ Alpha   = 1.1396;
 MargenDinamico_atenuador_dB = 34;
 
 Lespecifica_lluvia = K * R_001  % dB/Km
-Deff =h0+0.36 %Km
+
+hr=h0+0.36 %Km
+
+if(Angulo_elev>=5)
+   Ls = (1000*hr-hs)/sin(Angulo_elev) % metros 
+else
+    Ls = (2*(1000*ht-hs)/(sqrt((sin(Angulo_elev))^2)+ (2*(1000*hr-hs))/Re) +sin(Angulo_elev))
+end
+Lg = Ls*cos(Angulo_elev)
+
+r_001 = 1/(1 + 0.78*sqrt((Lg*Lespecifica_lluvia)/f) - 0.38*(1-exp(-2*Lg)))
+arcotang = atan((1000*hr-hs)/(Lg*r_001));
+
+if(arcotang >Angulo_elev)
+    Lr = (Lg*R_001)/cos(Angulo_elev) 
+else
+    Lr = (1000*hr -hs)/sin(Angulo_elev)
+end
+
+Lat = abs(Lat);
+if(Lat<36)
+   Epsilno  = 36 - Lat 
+else
+    Epsilon =0; 
+end
+
+termino3 = (31*(1-exp(-(Angulo_elev)/(1+Epsilon))*sqrt(Lr*Lespecifica_lluvia)))/(f*f)
+
+V_001 = 1/(1+sqrt(sin(Angulo_elev))*(termino3-0.45))
+Deff  = (Lr*V_001)/1000 %Km
+
+F_001 = Lespecifica_lluvia*Deff %dB
