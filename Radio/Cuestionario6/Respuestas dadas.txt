@@ -1,0 +1,13 @@
+
+PROBLEMA 2
+Valores intermedio-----
+Distancia = 15 Km
+Lespecifica_lluvia =    9.4847 dB/Km
+Deff =  0.2439 Km
+F_001 =  2.3131 dB
+-------------------------
+
+SOLUCIÓN:
+
+Como F_001 tiene un valor de2.3131 dB, significa que al menos durante una hora al año la lluvia va a generar una atenuación superior a este valor.
+No obstante, como el margen dinámico es mayor a este valor, significa que el enlace estará protegido el 100% de las veces a lo largo del año.
