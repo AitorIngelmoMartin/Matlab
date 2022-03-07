@@ -1,4 +1,24 @@
 
+PROBLEMA 1
+"Método uno"
+
+
+Ldif_O1_prima_dB = 3.8374
+
+
+Ldif_O2_prima_dB = 5.0948
+
+
+Ldif_dB =   8.2296
+
+Lbf_dB =  156.0786
+
+Tras hacer el valance de potencias:
+Prx_dBm = Ptx_dBm +G_dB -Lt_dB -Lbf_dB - Ldif_dB +G_dB - Lt_dB
+
+Prx_dBm =  -87.3082
+
+
 PROBLEMA 2
 Valores intermedio-----
 Distancia = 15 Km
@@ -9,8 +29,9 @@ F_001 =  2.3131 dB
 
 SOLUCIÓN:
 
-Como F_001 tiene un valor de2.3131 dB, significa que al menos durante una hora al año la lluvia va a generar una atenuación superior a este valor.
-No obstante, como el margen dinámico es mayor a este valor, significa que el enlace estará protegido el 100% de las veces a lo largo del año.
+Como F_001 tiene un valor de 2.3131 dB, significa que al menos durante una hora al año la lluvia va a generar una atenuación mayor a este valor.
+No obstante, como el margen dinámico es mayor, significa que el enlace estará protegido el 100% de las veces a lo largo del año.
+
 
 PROBLEMA3
 Valores intermedio-----
@@ -31,9 +52,20 @@ V_001 =    1.6929
 Deff =    4.7514 Km
 
 F_001 =    6.9109 dB
+
+
+
+Beta =    0
+
+
+F_q =   2.2259dB
 -------------------------
 
 SOLUCIÓN:
 
-Tras hacer todos los cálculos, se ha obtenido que F_001 = 6.9109. Esto significa, que al menos durante una hora al año la lluvia va a causar unas pérdidas de valor 6.9109 dB. 
-(Como además es el caso horizontal, es el valor más pesimista posible, en polarización horizontal siempre se obtiene menos atenuación)
+Tras hacer todos los cálculos, se ha obtenido que F_001 = 6.9109. Esto significa, que al menos durante una hora al año la lluvia va a causar unas pérdidas de valor 6.9109 dB.
+Para obtener el valor el 1% del tiempo ,vamos a usar la expresion de abajo con q = 0.01.
+
+F_q =F_001*(q/0.01)^(-(0.655 + 0.033*log(q)-0.045*log(F_001))) = 2.2259dB
+ 
+Por lo que

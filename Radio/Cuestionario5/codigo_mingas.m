@@ -54,7 +54,7 @@ if(v1>-0.78 && v2>-0.78)
     %Metodo obstaculos parecidos
     if((v1<0 && v2<0) || (abs(v1-v2)<0.5))
 
-        dO1O2 = d1O2 - d1O1; %Distancia entre obstaculo 1 y 2
+        dO1O2 = d1O2 - d1O1 %Distancia entre obstaculo 1 y 2
 
         bO1prima= (d1O1*dO1O2)/(2*k*R0); %Nuevo abultamiento obstaculo 1
         bO2prima= (dO1O2*d2O2)/(2*k*R0); %Nuevo abultamiento obstaculo 2

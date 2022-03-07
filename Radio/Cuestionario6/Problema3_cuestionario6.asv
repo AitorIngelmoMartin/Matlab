@@ -19,19 +19,21 @@ G_dB    = G_dBi - 2.14;
 Ptx_dBw = 5;
 R_001   = 38.89;% mm/Km
 Alpha   = 1.1396;
-hr      =h0+0.36 %Km
-MD_dB   = 34;
 
-Lespecifica_lluvia = K * R_001  % dB/Km
+MargenDinamico_atenuador_dB = 34;
+
+Lespecifica_lluvia          = K * R_001  % dB/Km
+
+hr=h0+0.36 %Km
 
 if(Angulo_elev>=5)
    Ls = (1000*hr-hs)/sin(Angulo_elev) % metros 
 else
-   Ls = (2*(1000*ht-hs)/(sqrt((sin(Angulo_elev))^2)+ (2*(1000*hr-hs))/Re) +sin(Angulo_elev))
+    Ls = (2*(1000*ht-hs)/(sqrt((sin(Angulo_elev))^2)+ (2*(1000*hr-hs))/Re) +sin(Angulo_elev))
 end
+Lg = Ls*cos(Angulo_elev)
 
-Lg       = Ls*cos(Angulo_elev)
-r_001    = 1/(1 + 0.78*sqrt((Lg*Lespecifica_lluvia)/f) - 0.38*(1-exp(-2*Lg)))
+r_001 = 1/(1 + 0.78*sqrt((Lg*Lespecifica_lluvia)/f) - 0.38*(1-exp(-2*Lg)))
 arcotang = atan((1000*hr-hs)/(Lg*r_001));
 
 if(arcotang >Angulo_elev)
@@ -41,9 +43,8 @@ else
 end
 
 Lat = abs(Lat);
-
 if(Lat<36)
-    Epsilno  = 36 - Lat 
+   Epsilno  = 36 - Lat 
 else
     Epsilon =0; 
 end
@@ -52,19 +53,5 @@ termino3 = (31*(1-exp(-(Angulo_elev)/(1+Epsilon))*sqrt(Lr*Lespecifica_lluvia)))/
 
 V_001 = 1/(1+sqrt(sin(Angulo_elev))*(termino3-0.45))
 Deff  = (Lr*V_001)/1000 %Km
+
 F_001 = Lespecifica_lluvia*Deff %dB
-
-
-
-q = 0.1;
-
-if(q>=0.01 || Lat>=36)
-   Beta=0
-else
-    if(q<0.01 && Lat< 36 && Angulo_elev>=25)
-        Beta = -0.005*(Lat -36)
-    end
-    Beta = -0.005*(Lat -36) +18 -4.25*sin(Angulo_elev)
-end
-
-Fq =F_001*(q/0.01)^(-(0.655 + 0.033*log(q)-0.045*log(F_001)))
