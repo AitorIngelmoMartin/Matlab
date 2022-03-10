@@ -1,43 +1,41 @@
 clear;close all;clc;
 
 % **************** DESVANECIMIENTO POR LLUVIA *****************
-f  = 14e9;
-c  = 3e8;
-R0 = 6370000;
-K  = 0.0374;
-Re = K*R0;
-hs = 368;
-h0 = 2.33; %Km
+f    = 14;
+R0   = 6370000;
+K    = 0.0374;
+Re   = K*R0;
+hs   = 368/1000; %Km
+h0   = 2.33; %Km
 Lat  = 36.71;
 Long = 5.7;
 Angulo_elev = 27.3; %Grados
-lambda      = c/f;
 Distancia   = 38920; % Km
 
 G_dBi   = 27;
 G_dB    = G_dBi - 2.14;
 Ptx_dBw = 5;
-R_001   = 38.89;% mm/Km
+R_001   = 38.89;% mm/H
 Alpha   = 1.1396;
-hr      =h0+0.36 %Km
+hr      = (h0+0.36) %Km
 MD_dB   = 34;
 
 Lespecifica_lluvia = K * R_001  % dB/Km
 
 if(Angulo_elev>=5)
-   Ls = (1000*hr-hs)/sin(Angulo_elev) % metros 
+   Ls = (hr-hs)/sind(Angulo_elev) % metros 
 else
-   Ls = (2*(1000*ht-hs)/(sqrt((sin(Angulo_elev))^2)+ (2*(1000*hr-hs))/Re) +sin(Angulo_elev))
+   Ls = (2*(hr-hs)/(sqrt((sin(Angulo_elev))^2)+ (2*(hr-hs))/Re) +sind(Angulo_elev));
 end
 
 Lg       = Ls*cos(Angulo_elev)
 r_001    = 1/(1 + 0.78*sqrt((Lg*Lespecifica_lluvia)/f) - 0.38*(1-exp(-2*Lg)))
-arcotang = atan((1000*hr-hs)/(Lg*r_001));
+arcotang = atan((1000*hr - hs)/(Lg*r_001));
 
 if(arcotang >Angulo_elev)
     Lr = (Lg*R_001)/cos(Angulo_elev) 
 else
-    Lr = (1000*hr -hs)/sin(Angulo_elev)
+    Lr = (1000*hr - hs)/sin(Angulo_elev)
 end
 
 Lat = abs(Lat);
