@@ -1,0 +1,27 @@
+problema1
+
+Resultados intermedios-------------
+
+Gamma_r =    15.95dB/Km
+
+
+Deff =  10.6165133377618
+
+
+F_001 =   169.3333877373
+
+
+Fq =    168.103555188735
+
+
+PIRE_dBm_vbls =  280.415576783087
+
+
+PIRE_dBm_cag =   112.312021594352
+SOLUCIÓN:
+Fq siempre va a ser el mismo valor independientemente de qué herramienta usemos para proteger el sistema.
+
+En el caso de un atenuador variable la PIRE será 280dBm y en el caso de un CAG de 112.31dBm
+
+problema2
+

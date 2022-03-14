@@ -19,8 +19,6 @@ G_dB    = G_dBi - 2.14;
 Ptx_dBw = 5;
 R_001   = 24.42;% mm/Km
 Alpha   = 0.8552;
-
-lambda    = c/f;
 Distancia = 15; % Km
 f         = 38;
 
