@@ -25,3 +25,51 @@ En el caso de un atenuador variable la PIRE será 280dBm y en el caso de un CAG d
 
 problema2
 
+
+Lespecifica_lluvia PH =   1.1001
+
+
+Deff =    8.9055
+
+
+F_001_PH =    9.7969
+
+
+Lespecifica_lluvia =    0.9072
+
+
+Deff =    9.2628
+
+
+F_001_PV =    8.4031
+
+
+Prx_PH_dBm =
+ -151.9951
+
+
+Prx_PV_dBm =
+ -150.6117
+
+problema 3Datos intermedios:
+
+Difracc_O1 =        0.0161552877964994
+
+
+Difracc_O2 =         -1.01502491131167
+
+uso obstáculos parecidos -->Ldif_dB = 8.83901463331208
+
+Lespecifica_lluvia =    2.48866953440767
+
+
+Deff =    15.1216126537408
+
+
+F_001 =  37.6326967224783
+
+
+Prx_dBm =    -98.7401882562338 (a menos que se sume potencia, no es viable.)
+SOLUCIÓN:
+
+No tengo mucha idea aún sobre el uso del MTTR, y he ido dejando para el final el cuestionario para el final, por lo que no me da tiempo a hacerte la pregunta por correo.

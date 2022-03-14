@@ -70,4 +70,6 @@ Fq_PV = F_001_PV*C1*(0.01^(-(C2+C3*log10(0.01))));
 
 Prx_PH_dBm = Ptx_dBm_PH -Lbf_dB -Fq_PH + G_dB + G_dB
 
+Prx_PV_dBm = Ptx_dBm_PH -Lbf_dB -Fq_PV + G_dB + G_dB
+
 % Prx_dBm = Ptx_dBw + G_dBi - Lbf_dB + G_dBi;
