@@ -4,16 +4,16 @@ clear;close all;clc;
 f  = 18e9;
 c  = 3e8;
 R0 = 6370000;
-K  = 0.55; %Tabulando a casi 20
+K  = 0.0771; %Tabulando a casi 20
 q  = 0.01;
 lambda    = c/f;
 Distancia = 16; % Km
 
-f       = 14;
+f       = 18;
 G_dB    = 27;
 R_001   = 29;% mm/Km
 Umbral_dBm = -88;
-Alpha = 1; %Tabulando casi a 20 en PV
+Alpha = 1.0025; %Tabulando casi a 20 en PV
 
 Gamma_r  = K* R_001^Alpha %dB/Km
 termino1 = 0.477*(Distancia^0.633)*(R_001^(0.073*Alpha))*(f^(0.123));
@@ -30,10 +30,10 @@ end
 C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
-Fq = F_001*C1*(q^(-(C2+C3*log10(q))))
-
-Lbf_dB    = 20*log10((4*pi*(Distancia*1000)*(Distancia*1000))/lambda);
-Lgases_dB = 0.1*Distancia;
+Fq = F_001;
+Distancia = 16e3;
+Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
+Lgases_dB = 0.09*Distancia/1000;
 Lb_dB     = Lbf_dB + Lgases_dB;
 
 PIRE_dBm_vbls = Umbral_dBm - G_dB + Lb_dB + Fq

@@ -17,7 +17,7 @@ G_dB       = G_dBi-2.14;
 R_001      = 32;% mm/Km
 Umbral_dBm = -96;
 Lt_dB = 2;
-Alpha       = 1.0025; %Tabulando casi a 20 en PV
+Alpha       = 1.0818; %Tabulando casi a 20 en PV
 MTBF_horas  = 1.5e6;
 Distancia   = 35000;
 
@@ -77,7 +77,7 @@ Difracc_O2   = sqrt(2)*(Despejamiento_O2/Rfresnell_O2)
         Ldif_dB = Ldif_A_prima+Ldif_B_prima+10*log10((Distancia_E1_O2*Distancia_E2_O1)/(Distancia_entre_obstaculos*(Distancia_E1_O2+Distancia_E2_O1)))
 
  Lbf_dB  = 20*log10((4*pi*Distancia/lambda));        
- Distancia=35;f=18;K =0.0771;       
+ Distancia=35;f=18;     
  
 Lespecifica_lluvia = K *(R_001^Alpha)  % dB/Km
 
