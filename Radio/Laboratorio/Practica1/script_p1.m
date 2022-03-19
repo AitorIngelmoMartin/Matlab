@@ -131,7 +131,7 @@ frec=mean([10.7,12.75])*1e9;
 BOC=design(horn,frec);
 BOC.Tilt=90;
 BOC.TiltAxis=[0 1 0];
-
+% 
 % PBL=design(reflectorParabolic,frec);
 % PBL.Exciter=BOC;
 % PBL.Tilt=90;
