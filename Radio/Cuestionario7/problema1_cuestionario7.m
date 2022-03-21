@@ -30,7 +30,7 @@ end
 C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
-Fq = F_001;
+Fq = F_001; % ya que q=0.01
 Distancia = 16e3;
 Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
 Lgases_dB = 0.09*Distancia/1000;
