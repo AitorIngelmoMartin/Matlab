@@ -39,7 +39,7 @@ e_dBuVn = 20*log10(e/1e-6);
 
 %Cálculos adicionales
 Seff = ((lambda^2)/(4*pi))*g
-Seff_dB = 10*log(Seff);
+Seff_dB = 10*log10(Seff);
 
 Prx = ((Ptx*(1/Lt))/(4*pi*D*D))*Seff*g*(1/Lt)
 

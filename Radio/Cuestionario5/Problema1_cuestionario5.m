@@ -71,29 +71,10 @@ else
 end
 % -------------------------------------------------------------------------
 Lbf_dB = 20*log10((4*pi*Distancia)/lambda);
-
-Lad_dB = Lbf_dB + Lref_dB;
+Lad_dB = Lref_dB;
 Lad    = 10^(Lad_dB/10);
 
 e_rx_dBu = 71.2;
-e_V      = (10^(e_rx_dBu/20))*1e-6;
-
-flujo    = (e_V*e_V)/(120*pi);
-PIRE     = flujo*(4*pi*Distancia*Distancia);
-PIRE_dBw = 10*log10(PIRE)
-
-Ptx_w = (PIRE*Lt)/Gmax
-
-
-
-
-% PIRE_dB = Prx
-% Prx_W = PIRE - Lbf_dB + Gmax_dB - Lt_dB
-
-
-
-
-
-
-
-
+PIRE_W   = (((10^(e_rx_dBu/20))*1e-6)^2*Distancia*Distancia*10^(Lad_dB/10))/30;
+PIRE_dbW = 10*log10(PIRE_W);
+Ptx_dBW  = PIRE_dbW - Gmax_dB + Lt_dB 

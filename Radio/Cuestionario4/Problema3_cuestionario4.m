@@ -48,9 +48,10 @@ H1 = h1 - (d1^2)/(2*K*R0);
 Phi = atan(H1/d1);
 Phi_lim = (1/1000)*(5400/(f/1000))^(1/3);
 
-Epsilon0 = Permeavilidad_terreno -1i*60*Conductividad*lambda;
+Epsilon0    = Permeavilidad_terreno -1i*60*Conductividad*lambda;
 numerador   = Epsilon0*sin(Phi) - sqrt(Epsilon0-(cos(Phi)*cos(Phi)));
 denominator = Epsilon0*sin(Phi) + sqrt(Epsilon0-(cos(Phi)*cos(Phi)));
+
 Rv =numerador/denominator;
 % Programar para que vaya solito poe PH/PV
 
@@ -67,9 +68,9 @@ if(Phi>=Phi_lim)
         Dcaminos =sqrt( Distancia*Distancia + abs(H1+H2)^2 ) - sqrt( Distancia*Distancia + abs(H1-H2)^2 );
         
         Divergencia = ( 1 + (5*(d1/1000*d1/1000*d2/1000)/(16*K*(Distancia/1000)*H1)) )^(-0.5)
-        Refectivo = Rv*Divergencia*exp(-((Rugosidad*Rugosidad)/2))
-        exponente = (-1i*(((2*pi)/lambda))*Dcaminos);
-        Lref_dB   = -20*log10(norm( 1 + (Refectivo*exp(exponente)) )) 
+        Refectivo   = Rv*Divergencia*exp(-((Rugosidad*Rugosidad)/2))
+        exponente   = (-1i*(((2*pi)/lambda))*Dcaminos);
+        Lref_dB     = -20*log10(norm( 1 + (Refectivo*exp(exponente)) )) 
     end
     
 else
