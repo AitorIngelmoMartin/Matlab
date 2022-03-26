@@ -57,8 +57,7 @@ if(Phi>=Phi_lim)
 else
  %Código ejecutado si hay difracción -> MDTE
     "Hay pérdidas por difracción"
-    R=K*R0;
-    
+    R=K*R0;    
     if(Polarizacion == "horizontal")
        X = ((pi/(lambda*R*R))^(1/3))*Distancia;
        Y2=2*(((pi*pi)/(lambda*lambda*R))^(1/3))*h2

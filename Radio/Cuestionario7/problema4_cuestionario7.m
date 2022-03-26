@@ -68,7 +68,8 @@ end
 XPD_ll = U - V*log10(F_ll);
 
 Lgases_dB = 0.0160*Distancia;
-XPD_dB = 0--40;
+XPD_dB    = 0--40;
+
 Prx_CP_PH_dBm = Ptx_dBm_PH + G_dB -Lt_dB - Lbf_dB - Lgases_dB - Fq_PH + G_dB - Lt_dB
 
 Prx_XP_PH_dBm = Ptx_dBm_PH + G_dB -Lt_dB - Lbf_dB - Lgases_dB - Fq_PH + G_dB - Lt_dB - XPD_dB - XPD_ll 
