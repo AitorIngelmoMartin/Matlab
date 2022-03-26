@@ -17,7 +17,7 @@ Lt = 10*10^(Lt_dB/10);
 
 % Pérdidas en espacio libre, en dB y Wats
 Lbf = ((4*pi*D*D)/lambda)^2;
-Lbf_dB = 20*log10((4*pi*D*D)/lambda)
+Lbf_dB = 20*log10((4*pi*D)/lambda)
 
 % PIRE en dBw y W
 g_dB=28;

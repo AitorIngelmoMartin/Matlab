@@ -26,10 +26,10 @@ Boltzman = 1.381e-23;
 
 
 Figura_ruido_Rx_dB = 7.5;
-alfa_lluvia        =0.1; %dB/Km
+alfa_gases        =0.1; %dB/Km
 
 Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
-Lgases_dB = alfa_lluvia*Distancia/1000;
+Lgases_dB = alfa_gases*Distancia/1000;
 Lb_dB     = Lbf_dB + Lgases_dB;
 
 %Como no dan figura de ruido del amplificador, supongo que es ideal f=1
