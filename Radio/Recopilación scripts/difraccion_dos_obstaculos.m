@@ -1,18 +1,19 @@
 clc;clear;close all
-K = 4/3;
-f =18e9;
+
+K = 2/3;
+f =2.3e9;
 c =3e8;
 lambda=c/f;
 R0 = 6370000;
-Distancia = 35000;
-
-h1 = 220+15;
-h2 = 307+5;
+Distancia = 20.09e3;
+Re = K*R0;
+h1 = 796+17;
+h2 = 805+12;
 
 %OBSTACULO A---------
-Distancia_E1_O1 = 8000;
+Distancia_E1_O1 = 1.910e3;
 Distancia_E2_O1 = Distancia - Distancia_E1_O1;
-e_O1            = 240;
+e_O1            = 803;
 
 Flecha_O1        = (Distancia_E1_O1*Distancia_E2_O1)/(2*K*R0);
 
@@ -26,9 +27,9 @@ Difracc_O1   = sqrt(2)*(Despejamiento_O1/Rfresnell_O1)
 
 
 %OBSTACULO B---------
-Distancia_E1_O2  = 14000;
+Distancia_E1_O2  = 3.721e3;
 Distancia_E2_O2  = Distancia - Distancia_E1_O2;
-e_O2             = 240;
+e_O2             = 799;
 
 Flecha_O2        = (Distancia_E1_O2*Distancia_E2_O2)/(2*K*R0);
 

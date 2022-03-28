@@ -58,8 +58,8 @@ Lgases_dB = alfa_gases*Distancia/1000;
 Lad_dB    = Lgases_dB
 Flujo_dBw = -94; %dBw/m^2
 Flujo_W   = 10^(Flujo_dBw/10);
-PIRE_W    = Flujo_W * 4*pi*Distancia*Distancia
-PIRE_dBw  = 10*log10(PIRE_W)
+PIRE_W_rx    = Flujo_W * 4*pi*Distancia*Distancia
+PIRE_dBw_rx  = 10*log10(PIRE_W)
 Prx_dBw   = PIRE_dBw -Lbf_dB - Lad_dB + G_PH_dB - Lt_dB
 
 % Tras lo terminales, el receptor presenta un figura de ruido de 8dB.

@@ -18,6 +18,7 @@ Simbolos  = 64;
 roll_off  = 0.3;
 Rb_bps    = 64e6;
 alfa_gas  = 4; %dB/Km
+Alpha = 1.14;
 
 Conductividad         = 0.001;
 Permeavilidad_terreno = 15;
@@ -37,7 +38,7 @@ Ptx_dBm = 14;
 Lt_dB   = 2;
 Lt      = 10^(Lt_dB/10)
 T0      = 290;
-Re = K*R0
+
 Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
 Lgases_dB = alfa_gas*Distancia/1000;
 
@@ -97,7 +98,7 @@ Lb_dB     = Lgases_dB + Lref_dB;
 % PH
 Gamma_PH = K *(R_001^Alpha)  % dB/Km
 
-termino1 = 0.477*(Distancia^0.633)*(R_001^(0.073*Alpha_PH))*(f^(0.123));
+termino1 = 0.477*(Distancia^0.633)*(R_001^(0.073*Alpha))*(f^(0.123));
 termino2 = 10.579*(1-exp(-0.024*Distancia));
 Deff     = (Distancia)/(termino1-termino2) %Km
 
