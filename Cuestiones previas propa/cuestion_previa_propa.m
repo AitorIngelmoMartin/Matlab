@@ -25,21 +25,24 @@ mu_vacio    = 1.2566370614e-6;
 %  CUESTION 4 - lambda_g, lambda_c, Kc, coefciciente_fase, Vfase, Vgrupo
 %               si f es 25% superior a fc_10.
 
-f10 = fc_10+(fc_10*(25/100))
+f10    = fc_10+(fc_10*(25/100))
 
 lambda = c/f10;
 
 % lambdaGrupo_10 = lambda/(sqrt(1 - (lambda/2*a)^2)) %HACER A MANO
 
-lambda_Guia_10 = 1/(f10*sqrt(mu_vacio)*sqrt(1-(fc_10/f10)^2))
+lambda_Guia_10 = lambda/sqrt(1-(fc_10/f10)^2)
 
 lambdaCorte_10 = (2*a)
 
-Kcorte_10 = pi/a
+Kcorte_10      = pi/a
 
-Vfase_10  = 1/(sqrt(mu_vacio)*(sqrt(1 - (lambda/2*a)^2)))
+% O velocidad de propagación
+Vfase_dielectrico   = (2*pi*fc_10)/((2*pi)/lambdaCorte_10)
 
-Vgrupo_10 =  (1/mu_vacio)*sqrt(1 - (lambda/2*a)^2)
+Vfase_10            = (lambda_Guia_10/lambda)*Vfase_dielectrico
+
+Vgrupo_10           =  Vfase_dielectrico*sqrt(1-(fc_10/f10)^2)
 
 Coeficiente_de_fase = ((2*pi*f10)/c)*sqrt(1-(fc_10/f10)^2)
 % CUESTION 5 - sacar las impedancias de cada modo
@@ -56,7 +59,5 @@ Zte_01 = 120*pi/(sqrt ( 1- (fc_01/f01)^2))
 
 % CUESTION 6 - coeficiente de atenuacion para TE10
 
-sigma_vacio = 1;
-Rs = sqrt((2*pi*f10*mu_vacio)/2*sigma_vacio)
-
-% alfa_c = (Rs/(120*pi)) * (1+((2*b*fc_10*fc_10)/(a*f*f))/()
+% sigma_vacio = 1;
+% Rs = sqrt((2*pi*f10*mu_vacio)/2*sigma_vacio)
