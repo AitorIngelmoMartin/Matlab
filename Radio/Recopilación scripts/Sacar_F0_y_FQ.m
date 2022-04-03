@@ -1,6 +1,6 @@
 clc;clear
 
-f       = f/(1e9);
+f       = f/(1e9);Distancia =Distancia/1000;
 R_001   = 29;       % mm/Km
 Alpha = 1.0025;     %Tabulando casi a 20 en PV
 
@@ -22,4 +22,24 @@ C3 = (0.139*C0) + 0.043* (1-C0);
 if(q == 0.01)
 Fq = F_001; % ya que q=0.01
 end
-Fq_PH = F_001_PH*C1*(q^(-(C2+C3*log10(q))));
+
+
+logaritmo = log10(MD/F_001*C1);
+
+soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
+x = max(soluciones_x);
+q = 10^x
+
+Fq_dB   = F_001_PH*C1*(q^(-(C2+C3*log10(q))))
+
+U = 15 + 30*log10(f);
+
+if (f>8 && f<=20)
+    V = 12.8*f^0.19;
+elseif (f>20 && f<=35)
+    V = 22.6;
+end
+
+XPD_ll = U - V*log10(Fq_dB);
+
+Fq = F_001*C1*(q^(-(C2+C3*log10(q))));

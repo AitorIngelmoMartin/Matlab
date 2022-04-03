@@ -42,7 +42,7 @@ if(Phi>=Phi_lim)
         %Las pérdidas por refelxión son cero;
         Lref = 0;
     else
-        Dcaminos =sqrt( Distancia*Distancia + abs(H1+H2)^2 ) - sqrt( Distancia*Distancia + abs(H1-H2)^2 );        
+        Dcaminos    = sqrt( Distancia*Distancia + abs(H1+H2)^2 ) - sqrt( Distancia*Distancia + abs(H1-H2)^2 );        
         Divergencia = ( 1 + (5*(d1/1000*d1/1000*d2/1000)/(16*K*(Distancia/1000)*H1)) )^(-0.5)
         Refectivo   = Rv*Divergencia*exp(-((Rugosidad*Rugosidad)/2))
         exponente   = (-1i*(((2*pi)/lambda))*Dcaminos);
