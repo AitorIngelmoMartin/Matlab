@@ -56,7 +56,7 @@ else
  C0 = 0.12;    
 end
 
-F_ll = 19;
+% F_ll = 19;
 U = 15 + 30*log10(f);
 
 if (f>8 && f<=20)
@@ -65,7 +65,7 @@ elseif (f>20 && f<=35)
     V = 22.6;
 end
 
-XPD_ll = U - V*log10(F_ll);
+XPD_ll = U - V*log10(Fq_PH);
 
 Lgases_dB = 0.0160*Distancia;
 XPD_dB    = 0--40;

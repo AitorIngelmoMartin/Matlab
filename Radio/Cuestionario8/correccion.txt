@@ -1,0 +1,46 @@
+PREGUNTA 3:
+
+	*Revisar dato en la gráfica de alfa_gases 
+	
+	*El receptor está compuesto por antena-terminales-receptor así que: T_antes_dispositivo = T0/Lt2 + T0*(Lt2-1)/Lt2 + T0*(Frx-1) --- 
+	
+ 	*No hay que considerar la ganancia de la antena receptora y donde Figura_ruido_Rx = 10^(Figura_ruido_Rx_dB /10);
+	
+	*El dato no es Eb-No es CNR así que Thx_dBW = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn)+degradación ----- 
+	
+	*El Bn es ancho de banda equivalente de ruido no ancho de banda de la señal; no olvides agregar la degradación y que el logaritmo es log10.
+	
+	*Para calcular MD a través de una resta tienes que utilizar las mismas unidades para Prx y Th o dBW en las dos o dBm en las dos: MD_dBW =  Prx_dBW - Thx_dBW
+
+PREGUNTA 4:
+
+	*No puede salir un Refectivo cuyo módulo sea mayor que 1.
+	
+	*Los cálculos de lluvia no son correctos
+
+	PIRE no sale y depende del umbral pero no tengo ese resultado intermedio.
+
+
+
+-*-----------Er diego------------------
+PREGUNTA 4:
+
+	*Rh no puede tener un módulo mayor que 1. El error está porque para calcular estás utilizando Phi en mrad en lugar de en rad.
+	
+	*K para calcular lluvia (KR^alfa) no es el factor de modificiación del radio terrestre (1/3)
+
+	Para ruido hay que utilizar Bn ancho equivalente de ruido: CNR_dB = Eb_No_dB + 10*log10(Rb/Bn);
+
+	Faltan los terminales en la temperatura total
+
+	Cuiddo porque esta línea tiene error: Prec_total_dBm = CNR_dB + 10*log10(K*T_tot*B)-10*log10(B) + 30; en realidad es: Prec_total_dBm = CNR_dB + 10*log10(K*T_tot*Bn)+ 30; 
+
+	Tienes un error en los datos porque se te ha olvidad dividir entre 10: G_AFI = 10^(G_AFI_dB/10);
+
+	No entiendo esta línea: Fq_dB = PIRE_dBm - Prec_total_dBm - Lb_dB + G_dB - Lt_dB; MD es un dato del CAG MD=20;
+---------------------------------------
+PREGUNTA 5:
+
+	h2 no es un valor correcto sale aproximadamente 57m
+	Para calcular CNoR=Prx-10log(KTtotal); Prx se calcula a partir del flujo y Ttotal como en los otros ejercicios
+	Eparasito=Eespaciolibre-MD-XPDlluvia

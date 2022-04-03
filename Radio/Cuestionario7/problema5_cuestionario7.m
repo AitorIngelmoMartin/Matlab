@@ -3,7 +3,7 @@ clear;close all;clc;
 f   = 18e9;
 c   = 3e8;
 R0  = 6370000;
-K   = 4/3; %Tabulando a casi 20
+K   = 4/3;
 Re  = K*R0;
 h1  = 235;
 h2  = 312;
@@ -19,6 +19,7 @@ G_dB       = G_dBi-2.14;
 R_001      = 32;% mm/Km
 Lt_dB      = 2;
 Umbral_dBm = -96;
+Umbral_W = (1/1000)*10^(Umbral_dBm/10);
 
 Alpha_PH    = 1.0818; %Tabulando casi a 20 en PV
 MTBF_horas  = 1.5e6;
@@ -85,10 +86,11 @@ C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
 
-Fq_dB = F_001*C1*(q^(-(C2+C3*log10(q))))
+Fq_dB   = F_001*C1*(q^(-(C2+C3*log10(q))))
+Prx_dBm = Ptx_dBm + G_dB - Lt_dB - Lbf_dB - Lgases_dB - Ldif_dB + G_dB - Lt_dB - Fq_dB
 
-%   39.8220
+Prx1_dBm =  -Umbral_dBm+Fq_dB;
 
-Prx_dBm = Ptx_dBm + G_dB - Lt_dB - Lbf_dB - Fq_dB - Ldif_dB + G_dB - Lt_dB
+% Umbral_W = 2*MTTR*(100/MTBF_horas)
+MTTR= Umbral_W*(MTBF_horas/2*100) 
 
-%HORAS?¿

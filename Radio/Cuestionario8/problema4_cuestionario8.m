@@ -1,7 +1,6 @@
 clear;close all;clc;
 
 
-
 % Estación receptora con LNA de figura de ruido de 6dB y ganancia 20dB, un mezclador con pérdidas 12dB y 
 % un amplificador en frecuencia intermedia con figura de ruido de 14dB. 
 % Este último amplificador cuenta con un control automático de potencia que permite amplificar hasta 20dB. 
@@ -19,11 +18,16 @@ roll_off  = 0.3;
 Rb_bps    = 64e6;
 alfa_gas  = 4; %dB/Km
 Alpha = 1.14;
+Boltzman = 1.381e-23;
+MD_dB =20;
+MD = 10^(MD_dB/10);
+
+Bn = Rb_bps/log2(Simbolos);
 
 Conductividad         = 0.001;
 Permeavilidad_terreno = 15;
 Rugosidad = 0.2;
-G_dB = 9;
+Gantena_dB = 9;
 h1 =210;
 h2 =54;
 
@@ -72,8 +76,8 @@ end
 H2 = h2 - (d2^2)/(2*K*R0);
 H1 = h1 - (d1^2)/(2*K*R0);
 
-Phi = atan(H1/d1)*1000;
-Phi_lim = (5400/(f/1e6))^(1/3);
+Phi = atan(H1/d1);
+Phi_lim = (1/1000)*(5400/(f/1000))^(1/3);
 
 Epsilon0    = Permeavilidad_terreno -1i*60*Conductividad*lambda;
 numerador   = sin(Phi) - sqrt(Epsilon0-(cos(Phi)*cos(Phi)));
@@ -86,23 +90,25 @@ if(Phi>=Phi_lim)
    Divergencia = ( 1 + (5*(d1/1000*d1/1000*d2/1000)/(16*K*(Distancia/1000)*H1)) )^(-0.5)
    Refectivo   = Rh*Divergencia*exp(-((Rugosidad*Rugosidad)/2))
    exponente   = (-1i*(((2*pi)/lambda))*Dcaminos);
-   Lref_dB     = -20*log10(norm( 1 + (Refectivo*exp(exponente)) ))     
-
+   Lref_dB     = -20*log10(norm( 1 + (Refectivo*exp(exponente)) ))  
 else
  %Código ejecutado si hay difracción -> MDTE
    "Hay pérdidas por difracción"
 end
+
 Lb_dB     = Lgases_dB + Lref_dB;
 % *-*-*-*-*-*-*-
 
+Distancia = Distancia/1000;f=f/(1e9);
 % PH
+K = 0.07078;
 Gamma_PH = K *(R_001^Alpha)  % dB/Km
 
 termino1 = 0.477*(Distancia^0.633)*(R_001^(0.073*Alpha))*(f^(0.123));
 termino2 = 10.579*(1-exp(-0.024*Distancia));
 Deff     = (Distancia)/(termino1-termino2) %Km
 
-F_001_PH    =   Gamma_PH * Deff % dB
+F_001_PH =   Gamma_PH * Deff % dB
 % Almenos en una hora al año, la lluvia va a probocar una atenuación
 % mayor que F_001 en dB.
 
@@ -116,13 +122,41 @@ C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
 
-% *-*-*-*-*-*-*
-PIRE_dBm = Ptx_dBm  + G_dB - Lt_dB
-Prx_dBm  = PIRE_dBm + G_dB - Lb_dB - Lt_dB -Lbf_dB
+logaritmo = log10(MD/F_001_PH*C1);
 
-%  LNA con una figura de ruido de 6dB y ganancia 20dB, 
-%  un mezclador con pérdidas 12dB 
-%  amplificador en frecuencia intermedia con figura de ruido de 14dB que permite amplificar hasta 20dB. 
+soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
+x =max(soluciones_x);
+q = 10^x
 
 
-% El requisito de Eb/N0 es de 16dB para un filtro ideal. El MTTR es de 4 horas y el MTBF de 468.000 horas.
+% PIRE_dBm = Ptx_dBm  + G_dB - Lt_dB
+% Prx_dBm  = PIRE_dBm + G_dB - Lb_dB - Lt_dB -Lbf_dB
+
+Lt_dB = 2;
+Lt = 10^(Lt_dB/10);
+G1_dB = 20;
+G1 = 10^(G1_dB/10);
+F1_dB = 6;
+F1 = 10^(F1_dB/10);
+L2_dB = 12;
+L2 = 10^(L2_dB/10);
+F2_dB = 14;
+F2 = 10^(F2_dB/10);
+G2_dB = 20;
+G2 = 10^(G2_dB/10);
+
+CNR_dB = Eb_N0_dB + 10*log10(Rb_bps/Bn);
+
+T_antes_dispositivo = T0*((G1*G2)/(Lt*L2)) + T0*(Lt-1)*((G1*G2)/(L2)) + T0*(F2-1)*((G2)/(L2))+T0*(L2-1)*(1/L2)
+
+degradacion = (1+roll_off)*(Rb_bps/log2(Simbolos))
+
+Thx_dBW = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn)+10*log10(degradacion)
+
+Prx_total_dBm = CNR_dB + 10*log10(K*T_antes_dispositivo*Bn) + 30 % "+30" para apsar a dBm
+
+Ptx_dBm = Prx_total_dBm
+
+
+
+%  El MTTR es de 4 horas y el MTBF de 468.000 horas.

@@ -63,7 +63,7 @@ else
        end
        
        if(Y1>2)
-         G1 = 17.6*sqrt(Y2-1.1) -5*log10(Y2-1.1) -8          
+         G1 = 17.6*sqrt(Y2-1.1) -5*log10(Y2-1.1) - 8          
        else
          G1 = 20*log10(Y1+0.1*Y1*Y1*Y1)
        end
@@ -72,15 +72,15 @@ else
        end
        
        if(Y2>2)
-          G2 = 17.6*sqrt(Y1-1.1) -5*log10(Y-1.1) -8          
+          G2 = 17.6*sqrt(Y1-1.1) -5*log10(Y-1.1) - 8          
        else
           G2 = 20*log10(Y2+0.1*Y2*Y2*Y2)
        end
        
-       if(G2<(2 +20*log10(K)))
-          G2 = 2 +20*log10(K);
+       if(G2<(2 + 20*log10(K)))
+          G2 = 2 + 20*log10(K);
        end
        
-    Ldif_dB = -F -G1 -G2   
+    Ldif_dB = - F - G1 - G2   
     end
 end
