@@ -37,18 +37,12 @@ Lb_dB     = Lbf_dB + Lgases_dB;
 T_antes_dispositivo = T0/Lt2 + T0*(Lt2-1)/Lt2 + T0*(Figura_ruido_Rx-1)
 
 
-Prx_dBm = Ptx_dBm + G1_dB + G2_dB -Lbf_dB -Lt1_dB -Lt2_dB
-Prx_W   = (1/1000) * 10^(Prx_dBm/10)
-
-degradacion = (1+Roll_Off)*(Rb_bps/log2(16))
+Prx_dBm = Ptx_dBm + G1_dB + G2_dB - Lb_dB -Lt1_dB -Lt2_dB
 Bn = Rb_bps/log2(16);
+degradacion = (1+Roll_Off)*Bn
 
-Thx_dBW = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn)+10*log10(degradacion)
 
-Thx_W = 10^(Thx_dBW/10);
-MD_W =  Prx_W - Thx_W
-logaritmo = log10(MD/F_001*C1);
+Th_dBm = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) - 10*log10(degradacion) +30% el "+30" es para pasar a dBm
 
-soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
-x =max(soluciones_x);
-q = 10^x
+MD_dBm  =  Prx_dBm - Th_dBm
+

@@ -2,18 +2,22 @@ clear;close all;clc;
 
 f = 25e9;
 c = 3e8;
+
 lambda     = c/f;
 Distancia  = 17e3;
 alfa_gases = 1.5;
+
 R0      = 6370000;
 Lt_dB   = 1.5;
+
 Lt = 10^(Lt_dB/10);
 T0 = 290;
+
 Boltzman = 1.381e-23;
 G_PH_dB = 35;
-G_PH = 10^(G_PH_dB/10);
+G_PH    = 10^(G_PH_dB/10);
 
-R_001    = 26;
+R_001   = 26;
 CAG_dB  = 15;
 h1      = 292;
 h2      = 855;
@@ -61,11 +65,8 @@ Lbf_dB       = 20*log10((4*pi*Distancia)/lambda)
 
 Lgases_dB    = alfa_gases*Distancia/1000;
 
-Lad_dB       = Lgases_dB
-
-
-
-
+Lb_dB        = Lbf_dB+Lgases_dB;
+Lb           = 10^(Lb_dB/10);
 
 % Tras lo terminales, el receptor presenta un figura de ruido de 8dB.
 % Además, el receptor cuenta con un CAG como mecanismo de protección frente a desvanecimientos de 15dB. R0,01=26mm/h
@@ -79,29 +80,33 @@ Lad_dB       = Lgases_dB
 Flujo_dBw    = -94; %dBw/m^2
 
 Flujo_W      = 10^(Flujo_dBw/10);
-PIRE_W_rx    = Flujo_W * 4*pi*Distancia*Distancia
-Prx_W = PIRE_W_rx*(Lt/G_PH_dB)
+PIRE_W_rx    = Flujo_W * 4*pi*Distancia*Distancia*(1/Lb)
+Prx_W        = PIRE_W_rx*(Lt/G_PH_dB)
 
+Prx_dBW =10*log10(Prx_W)
 
-CAG = 10^(CAG_dB/10);
+CAG      = 10^(CAG_dB/10);
 F_CAG_dB = 8;
-f_CAG = 10^(F_CAG_dB/10);
-T_antes_dispositivo = T0*(1/Lt) + T0*(Lt-1)*(CAG) + T0*(f_CAG-1)
-CNoR=Prx_W-10*log10(Boltzman*T_antes_dispositivo)
+f_CAG    = 10^(F_CAG_dB/10);
+
+T_antes_dispositivo = T0*(CAG/Lt) + T0*(Lt-1)*(CAG/Lt) + T0*(f_CAG-1)*(CAG)
+
+CNoR = Prx_W-10*log10(Boltzman*T_antes_dispositivo)
 
 % c)    Calcular el campo parásito que aparece en condiciones de máximo desvanecimiento
 Distancia = Distancia/1000;f=f/(1e9);  
 
-K_PH     = 0.1571;
-Alpha_PH = 0.9991;
+K_PH      = 0.1571;
+Alpha_PH  = 0.9991;
 Lgases_dB = 0.060*Distancia; 
+
 Lespecifica_lluvia = K_PH *(R_001^Alpha_PH)  % dB/Km
 
 termino1 = 0.477*(Distancia^0.633)*(R_001^(0.073*Alpha_PH))*(f^(0.123));
 termino2 = 10.579*(1-exp(-0.024*Distancia));
 Deff     = (Distancia)/(termino1-termino2) %Km
 
-F_001_PH    = Lespecifica_lluvia* Deff % dB
+F_001_PH  = Lespecifica_lluvia* Deff % dB
 
 
 if(f>=10)
@@ -119,10 +124,11 @@ MD = CAG;
 logaritmo = log10(MD/F_001_PH*C1);
 
 soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
-x =max(soluciones_x);
+x = max(soluciones_x);
 q = 10^x
 
-Fq_dB   = F_001_PH*C1*(q^(-(C2+C3*log10(q))))
+% Fq_dB   = F_001_PH*C1*(q^(-(C2+C3*log10(q))))
+Fq_dB = CAG_dB;
 
 U = 15 + 30*log10(f);
 
@@ -138,7 +144,8 @@ XPD_ll = U - V*log10(Fq_dB);
 Distancia = Distancia*1000;f=f*(1e9);  
 
 EespacioLibre    = sqrt(Flujo_W*120*pi)
-EespacioLibre_dB = 10^(EespacioLibre/10)
+%                  PIRE_W/(4*pi*d^2*10^(Lad_dB/10)*10^(Fll_dB/10))
+EespacioLibre_dBu = 10*log10(EespacioLibre*1e6)
 
 
-Eparasito=EespacioLibre_dB-MD-XPD_ll;
+Eparasito_total_dBu = EespacioLibre_dBu - MD-XPD_ll

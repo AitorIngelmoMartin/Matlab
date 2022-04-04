@@ -50,7 +50,7 @@ end
 if( ( (Difracc_O1>0) && (Difracc_O2>0) ) && (abs(Difracc_O1 -Difracc_O2)>0.5) )
         "Método dos"
         
-        Dentre_obs             = (29-15)*1000;
+        Dentre_obs             = (Distancia_E1_O2-Distancia_E1_O1);
 
         Flecha_02_prima        = (Dentre_obs*Distancia_E2_O2)/(2*K*R0);
 

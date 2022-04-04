@@ -87,6 +87,8 @@ denominator = sin(Phi) + sqrt(Epsilon0-(cos(Phi)*cos(Phi)));
 Rh =numerador/denominator;
 
 if(Phi_comparativo>=Phi_lim)
+    
+   "Hay pérdidas por reflexión"
    Dcaminos    = sqrt( Distancia*Distancia + abs(H1+H2)^2 ) - sqrt( Distancia*Distancia + abs(H1-H2)^2 );        
    Divergencia = ( 1 + (5*(d1/1000*d1/1000*d2/1000)/(16*K*(Distancia/1000)*H1)) )^(-0.5)
    Refectivo   = Rh*Divergencia*exp(-((Rugosidad*Rugosidad)/2))
@@ -161,11 +163,4 @@ Prx_total_dBm = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 30 % "+30" 
 
 Prec_antena_dBm = Prx_total_dBm - G2 + L2 - G1;
 
-%Prec_antena_dB = PIRE_dB - Lb_dB + G_dB - Lt_dB
-PIRE_dBm = Prec_antena_dBm + Lb_dB - Lbf_dB - Gantena_dB + Lt_dB;
-
-% Ptx_dBm = Prx_total_dBm
-
-
-
-%  El MTTR es de 4 horas y el MTBF de 468.000 horas.
+PIRE_dBm = Prec_antena_dBm + Lb_dB + Lbf_dB - Gantena_dB + Lt_dB;
