@@ -20,17 +20,21 @@ C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
 
 if(q == 0.01)
-Fq = F_001; % ya que q=0.01
+Fq_dB = F_001; % ya que q=0.01
 end
 
+Fq_dB   = F_001_PH*C1*(q^(-(C2+C3*log10(q))))
 
-logaritmo = log10(MD/F_001*C1);
+% Calcular q -----------------------------------
+MD_dB = Fq_dB
+logaritmo = log10(MD_dB/(F_001_PH*C1));
 
 soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
-x = max(soluciones_x);
-q = 10^x
+x =max(soluciones_x);
+q_calculado = 10^x
 
-Fq_dB   = F_001_PH*C1*(q^(-(C2+C3*log10(q))))
+Fq_calculado_dB = F_001*C1*(q_calculado^(-(C2+C3*log10(q_calculado))));
+% Calcular q -----------------------------------
 
 U = 15 + 30*log10(f);
 
@@ -42,4 +46,3 @@ end
 
 XPD_ll = U - V*log10(Fq_dB);
 
-Fq = F_001*C1*(q^(-(C2+C3*log10(q))));

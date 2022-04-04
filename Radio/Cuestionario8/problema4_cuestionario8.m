@@ -16,8 +16,8 @@ Distancia =21e3;
 Simbolos  = 64;
 roll_off  = 0.3;
 Rb_bps    = 64e6;
-alfa_gas  = 4; %dB/Km
-Alpha = 1.14;
+alfa_gas  = 0.06; %dB/Km
+Alpha_PH = 1.0818;
 Boltzman = 1.381e-23;
 MD_dB =20;
 MD = 10^(MD_dB/10);
@@ -44,7 +44,7 @@ Lt      = 10^(Lt_dB/10)
 T0      = 290;
 
 Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
-Lgases_dB = alfa_gas*Distancia/1000;
+Lgases_dB = alfa_gas*(Distancia/1000);
 
 termino1 = K*R0+h1;
 termino2 = K*R0;
@@ -76,8 +76,9 @@ end
 H2 = h2 - (d2^2)/(2*K*R0);
 H1 = h1 - (d1^2)/(2*K*R0);
 
-Phi = atan(H1/d1);
-Phi_lim = (1/1000)*(5400/(f/1000))^(1/3);
+Phi_comparativo = 1000*atan(H1/d1);
+Phi_lim = (5400/(f/1e6))^(1/3);
+Phi =Phi_comparativo/1000;
 
 Epsilon0    = Permeavilidad_terreno -1i*60*Conductividad*lambda;
 numerador   = sin(Phi) - sqrt(Epsilon0-(cos(Phi)*cos(Phi)));
@@ -85,7 +86,7 @@ denominator = sin(Phi) + sqrt(Epsilon0-(cos(Phi)*cos(Phi)));
 
 Rh =numerador/denominator;
 
-if(Phi>=Phi_lim)
+if(Phi_comparativo>=Phi_lim)
    Dcaminos    = sqrt( Distancia*Distancia + abs(H1+H2)^2 ) - sqrt( Distancia*Distancia + abs(H1-H2)^2 );        
    Divergencia = ( 1 + (5*(d1/1000*d1/1000*d2/1000)/(16*K*(Distancia/1000)*H1)) )^(-0.5)
    Refectivo   = Rh*Divergencia*exp(-((Rugosidad*Rugosidad)/2))
@@ -96,15 +97,15 @@ else
    "Hay pérdidas por difracción"
 end
 
-Lb_dB     = Lgases_dB + Lref_dB;
+Lb_dB = Lgases_dB + Lref_dB;
 % *-*-*-*-*-*-*-
 
 Distancia = Distancia/1000;f=f/(1e9);
 % PH
-K = 0.07078;
-Gamma_PH = K *(R_001^Alpha)  % dB/Km
+K_PH = 0.07078;
+Gamma_PH = K_PH *(R_001^Alpha_PH)  % dB/Km
 
-termino1 = 0.477*(Distancia^0.633)*(R_001^(0.073*Alpha))*(f^(0.123));
+termino1 = 0.477*(Distancia^0.633)*(R_001^(0.073*Alpha_PH))*(f^(0.123));
 termino2 = 10.579*(1-exp(-0.024*Distancia));
 Deff     = (Distancia)/(termino1-termino2) %Km
 
@@ -121,13 +122,16 @@ end
 C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
+% Fq_PH = F_001_PH*C1*(q^(-(C2+C3*log10(q))));
 
-logaritmo = log10(MD/F_001_PH*C1);
+logaritmo = log10(MD_dB/(F_001_PH*C1));
 
 soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
 x =max(soluciones_x);
-q = 10^x
+q_calculado = 10^x
 
+Ulluvia=q_calculado;
+UR_total = Ulluvia + (3*MTTR/MTBF)*100; %Indisponibilidad total, UR_lluvia + UR_equipos
 
 % PIRE_dBm = Ptx_dBm  + G_dB - Lt_dB
 % Prx_dBm  = PIRE_dBm + G_dB - Lb_dB - Lt_dB -Lbf_dB
@@ -147,15 +151,20 @@ G2 = 10^(G2_dB/10);
 
 CNR_dB = Eb_N0_dB + 10*log10(Rb_bps/Bn);
 
-T_antes_dispositivo = T0*((G1*G2)/(Lt*L2)) + T0*(Lt-1)*((G1*G2)/(L2)) + T0*(F2-1)*((G2)/(L2))+T0*(L2-1)*(1/L2)
+T_antes_dispositivo = T0*((G1*G2)/(Lt*L2)) + T0*(Lt-1)*((G1*G2)/(L2*Lt)) + T0*(F1-1)*((G1*G2)/(L2)) + T0*(L2-1)*(G2/L2) + T0*(F2-1)*(G2)
 
 degradacion = (1+roll_off)*(Rb_bps/log2(Simbolos))
 
 Thx_dBW = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn)+10*log10(degradacion)
 
-Prx_total_dBm = CNR_dB + 10*log10(K*T_antes_dispositivo*Bn) + 30 % "+30" para apsar a dBm
+Prx_total_dBm = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 30 % "+30" para apsar a dBm
 
-Ptx_dBm = Prx_total_dBm
+Prec_antena_dBm = Prx_total_dBm - G2 + L2 - G1;
+
+%Prec_antena_dB = PIRE_dB - Lb_dB + G_dB - Lt_dB
+PIRE_dBm = Prec_antena_dBm + Lb_dB - Lbf_dB - Gantena_dB + Lt_dB;
+
+% Ptx_dBm = Prx_total_dBm
 
 
 

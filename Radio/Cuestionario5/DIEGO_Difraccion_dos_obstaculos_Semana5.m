@@ -1,19 +1,28 @@
 clear;clc;
 
-f = 18e9;
+f = 25e9;
 c=3e8;
 lambda= c/f;
 
+% Se establece un enlace radio punto a punto desde el emplazamiento A con cota de 252m al emplazamiento B cota de 855m. 
+% Las alturas de las antenas son iguales a 40m, en el estacionamiento A, y 36, en el emplazamiento B. 
+
+% Por un error en la instalación, las antenas se han orientado perfectamente en azimut pero con una elevación 
+% paralela a la horizontal (ángulo de elevación, en ambos emplazamientos, 0°). 
+
+% El terreno presenta dos obstáculos agudos: 
+% O1: de cota 396m a 3km de la estación A 
+% O2: de cota 642m a 10km de la estación A 
 
 % Alturas, distancia y radio en metros
 
-d = 35e3; %en Km
+d = 17e3; %en Km
 R0 =6370e3;
 
-e = [220 240 240 307];
-a = [15 0 0 15];
-d1 = [0 8e3 14e3 d];
-d2 = 38e3 - d1;
+e = [252 396 642 855];
+a = [40 0 0 36];
+d1 = [0 3e3 10e3 d];
+d2 = d - d1;
 
 % -------------------------------------------------------------------------
 k = 4/3;

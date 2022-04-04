@@ -42,8 +42,9 @@ C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
 
+
 % Fq = F_001*C1*(0.01^(-(C2+C3*log10(0.01))));
-logaritmo = log10(MD/F_001*C1);
+logaritmo = log10(MD_dB/(F_001*C1));
 
 soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
 x =max(soluciones_x);

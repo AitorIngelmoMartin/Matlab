@@ -1,18 +1,24 @@
 %%%% OBSTACULOS %%%
 clear;close all;clc;
+
+% e = [252 396 642 855];
+% a = [40 0 0 36];
+% d1 = [0 3e3 10e3 d];
+
+
 %Datos
-d=38e3;              %Distancia entre estaciones en metros
-d1O1=15e3;           %Distancia de la estacion 1 al obstaculo 1 en metros
+d=17e3;              %Distancia entre estaciones en metros
+d1O1=3e3;           %Distancia de la estacion 1 al obstaculo 1 en metros
 d2O1=d-d1O1;         %Distancia de la estacion 2 al obstaculo 1 en metros
-d1O2=29e3;           %Distancia de la estacion 1 al obstaculo 2 en metros
+d1O2=10e3;           %Distancia de la estacion 1 al obstaculo 2 en metros
 d2O2=d-d1O2;         %Distancia de la estacion 2 al obstaculo 2 en metros
-eE1=150;             %Elevacion estacion 1 en metros
-eE2=200;             %Elevacion estacion 2 en metros
-eO1=261;             %Elevacion obstaculo 1 en metros 
-eO2=239;             %Elevacion obstaculo 2 en metros 
-h1=150;              %Altura estacion 1
-h2=40;               %Altura estacion 2
-f=23e9;              %Frecuencia de trabajo
+eE1=40;             %Elevacion estacion 1 en metros
+eE2=36;             %Elevacion estacion 2 en metros
+eO1=396;             %Elevacion obstaculo 1 en metros 
+eO2=642;             %Elevacion obstaculo 2 en metros 
+h1=252;              %Altura estacion 1
+h2=855;               %Altura estacion 2
+f=25e9;              %Frecuencia de trabajo
 
 %Calculos previos
 lambda=3e8/f;        %Valor de lambda
@@ -31,8 +37,8 @@ yO2=((h2+eE2-h1-eE1)*d1O2/d)+h1+eE1;         %Altura rayo en obstaculo 2
 cO1=bO1+eO1-yO1;                             %Despejamiento obstaculo 1                
 cO2=bO2+eO2-yO2;                              %Despejamiento obstaculo 2
 
-v1=sqrt(2)*(cO1/r1O1);                       %Parametro difraccion obstaculo 1
-v2=sqrt(2)*(cO2/r1O2);                       %Parametro difraccion obstaculo 2
+v1=sqrt(2)*(cO1/r1O1)                       %Parametro difraccion obstaculo 1
+v2=sqrt(2)*(cO2/r1O2)                       %Parametro difraccion obstaculo 2
 
 %Despejamiento suficiente en obstaculo 1
 if(v1<=-0.78)
@@ -65,8 +71,8 @@ if(v1>-0.78 && v2>-0.78)
         cO1prima=bO1prima+eO1-yO1prima;             %Nuevo despejamiento obstaculo 1                
         cO2prima=bO2prima+eO2-yO2prima;             %Nuevo despejamiento obstaculo 2
 
-        r1O1prima=sqrt(lamda*((d1O1*dO1O2)/(d1O1+dO1O2))); %Nuevo radio Fresnel obstaculo 1
-        r1O2prima=sqrt(lamda*((dO1O2*d2O2)/(dO1O2+d2O2))); %Nuevo radio Fresnel obstaculo 2
+        r1O1prima=sqrt(lambda*((d1O1*dO1O2)/(d1O1+dO1O2))); %Nuevo radio Fresnel obstaculo 1
+        r1O2prima=sqrt(lambda*((dO1O2*d2O2)/(dO1O2+d2O2))); %Nuevo radio Fresnel obstaculo 2
         
         v1prima=sqrt(2)*(cO1prima/r1O1prima);              %Nuevo parametro difraccion obstaculo 1
         v2prima=sqrt(2)*(cO2prima/r1O2prima);                        %Nuevo parametro difraccion obstaculo 2
@@ -74,7 +80,7 @@ if(v1>-0.78 && v2>-0.78)
 
         Ldif_v1prima=6.9+20*log10(sqrt(((v1prima-0.1)^2)+1)+v1prima-0.1); %Perdidas por difraccion obstaculo 1
         Ldif_v2prima=6.9+20*log10(sqrt(((v2prima-0.1)^2)+1)+v2prima-0.1); %Perdidas por difraccion obstaculo 2
-        Lad=Ldif1+Ldif2+10*log10((d1O2*d2O1)/(dO1O2*(d1O2+d2O2))); %Perdidas adicionales
+        Lad=Ldif_v1prima+Ldif_v2prima+10*log10((d1O2*d2O1)/(dO1O2*(d1O2+d2O2))); %Perdidas adicionales
 
     end
     

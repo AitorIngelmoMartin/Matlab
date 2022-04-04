@@ -19,8 +19,9 @@ end
 H2 = h2 - (d2^2)/(2*K*R0);
 H1 = h1 - (d1^2)/(2*K*R0);
 
-Phi = atan(H1/d1);
-Phi_lim = (1/1000)*(5400/(f/1000))^(1/3);
+Phi_comparativo = 1000*atan(H1/d1);
+Phi_lim = (5400/(f/1e6))^(1/3);
+Phi =Phi_comparativo/1000;
 
 Epsilon0    = Permeavilidad_terreno -1i*60*Conductividad*lambda;
 
@@ -34,7 +35,7 @@ else
     Rh =numerador/denominator;    
 end
 
-if(Phi>=Phi_lim)
+if(Phi_comparativo>=Phi_lim)
  %Código ejecutado si hay reflexión -> MTC
     "Hay pérdidas por reflexión"
     Rugosidad = 4*pi*Rho*sin(Phi)/lambda;    
