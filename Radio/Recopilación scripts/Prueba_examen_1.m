@@ -34,6 +34,7 @@ Lt_dB     = 1.5;
 
 K  = 4/3;
 R0 = 6370000;
+Re= K*R0
 
 %OBSTACULO A---------
 Distancia_E1_O1 = 3e3;
@@ -67,17 +68,16 @@ Rfresnell_O2 = sqrt((lambda*Distancia_E1_O2*Distancia_E2_O2)/(Distancia_E1_O2+Di
 Difracc_O2   = sqrt(2)*(Despejamiento_O2/Rfresnell_O2)
 %--------------------
 
-if( ( (Difracc_O1<0) ||(Difracc_O2<0) ) && (abs(Difracc_O1 -Difracc_O2)<0.5) )
+if( (((Difracc_O1<0) ||(Difracc_O2<0) ) && (abs(Difracc_O1 -Difracc_O2)<0.5)) || (((Difracc_O1>0) && (Difracc_O2>0) ) && (abs(Difracc_O1 -Difracc_O2)<0.5)) )
     "Método uno"        
         %Para Ldif(uve'1)
         Distancia_entre_obstaculos = Distancia_E1_O2-Distancia_E1_O1;
 
         flecha_A_prima         = Distancia_entre_obstaculos*Distancia_E1_O1/(2*Re);
         altura_rayo_A_prima    = ((h1-e_O2)*Distancia_entre_obstaculos/Distancia_E1_O2)+e_O2;
-        altura_rayo = ((e(end)+a(end)-e(1)-a(1))/d) * d1 + e(1)+a(1);
         Despejamiento_A_prima  = e_O1 + flecha_A_prima - altura_rayo_A_prima;
 
-        R1_A_prima      = sqrt(lambda*Distancia_entre_obstaculos*Distancia_E2_O1/Distancia_E1_O2);
+        R1_A_prima      = sqrt(lambda*Distancia_entre_obstaculos*Distancia_E1_O1/Distancia_E1_O2);
         Difracc_A_prima = sqrt(2)*(Despejamiento_A_prima/R1_A_prima);
 
         %Para Ldif(uve'2)
@@ -91,7 +91,7 @@ if( ( (Difracc_O1<0) ||(Difracc_O2<0) ) && (abs(Difracc_O1 -Difracc_O2)<0.5) )
         Ldif_A_prima    = 6.9 + 20*log10(sqrt((Difracc_A_prima-0.1)^2+1)+Difracc_A_prima-0.1);
         Ldif_B_prima    = 6.9 + 20*log10(sqrt((Difracc_B_prima-0.1)^2+1)+Difracc_B_prima-0.1);
         
-        Ldif_dB = Ldif_A_prima+Ldif_B_prima+10*log10((Distancia_E1_O2*Distancia_E2_O1)/(Distancia_entre_obstaculos*(Distancia_E1_O2+Distancia_E2_O1)))
+Ldif_dB = Ldif_A_prima+Ldif_B_prima+10*log10((Distancia_E1_O2*Distancia_E2_O1)/(Distancia_entre_obstaculos*(Distancia_E1_O2+Distancia_E2_O2)))
 end
 
 if( ( (Difracc_O1>0) && (Difracc_O2>0) ) && (abs(Difracc_O1 -Difracc_O2)>0.5) )
@@ -116,7 +116,7 @@ if( ( (Difracc_O1>0) && (Difracc_O2>0) ) && (abs(Difracc_O1 -Difracc_O2)>0.5) )
 
         Tc            =(12 - 20*log10(2/(1 - (Alpha/pi))))*((Difracc_O2/Difracc_O1)^(2*Difracc_O1));
 
-        Lad           = Ldif_V1+Ldif_V2_prima-Tc
+        Lad=Ldif_V1+Ldif_V2_prima-Tc
 end
 
 if(Difracc_O2<-0.78 && Difracc_O1>-0.78)
@@ -130,5 +130,3 @@ end
 if(Difracc_O2<-0.78 && Difracc_O1<-0.78)
    "Los obstáculos no afectan" 
 end
-
-

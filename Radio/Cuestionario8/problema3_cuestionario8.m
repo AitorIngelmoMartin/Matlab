@@ -23,11 +23,12 @@ BW       = (1+0.3)*Rb_bps/(log2(16));
 CNR_dB = 18;
 CNR    = 10^(CNR_dB/10);
 Boltzman = 1.381e-23;
+Degradacion_dB = 1
 
 
 Figura_ruido_Rx_dB = 7.5;
 Figura_ruido_Rx = 10^(Figura_ruido_Rx_dB/10);
-alfa_gases        =0.2; %dB/Km
+alfa_gases        =0.02; %dB/Km
 
 Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
 Lgases_dB = alfa_gases*Distancia/1000;
@@ -42,7 +43,7 @@ Bn = Rb_bps/log2(16);
 degradacion = (1+Roll_Off)*Bn
 
 
-Th_dBm = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) - 10*log10(degradacion) +30% el "+30" es para pasar a dBm
+Th_dBm = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) - 1 +30 %10*log10(degradacion) +30% el "+30" es para pasar a dBm
 
-MD_dBm  =  Prx_dBm - Th_dBm
+MD_dB  =  Prx_dBm - Th_dBm
 
