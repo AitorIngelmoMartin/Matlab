@@ -5,7 +5,7 @@ c = 3e8;
 
 lambda     = c/f;
 Distancia  = 17e3;
-alfa_gases = 1.5;
+alfa_gases = 0.15;
 
 R0      = 6370000;
 Lt_dB   = 1.5;
@@ -66,7 +66,6 @@ Lbf_dB       = 20*log10((4*pi*Distancia)/lambda)
 Lgases_dB    = alfa_gases*Distancia/1000;
 
 Lb_dB        = Lbf_dB+Lgases_dB;
-Lb           = 10^(Lb_dB/10);
 
 % Tras lo terminales, el receptor presenta un figura de ruido de 8dB.
 % Además, el receptor cuenta con un CAG como mecanismo de protección frente a desvanecimientos de 15dB. R0,01=26mm/h
@@ -80,18 +79,18 @@ Lb           = 10^(Lb_dB/10);
 Flujo_dBw    = -94; %dBw/m^2
 
 Flujo_W      = 10^(Flujo_dBw/10);
-PIRE_W_rx    = Flujo_W * 4*pi*Distancia*Distancia*(1/Lb)
-Prx_W        = PIRE_W_rx*(Lt/G_PH_dB)
+PIRE_W_rx    = Flujo_W *(4 * pi*Distancia*Distancia)
+PIRE_dBW_rx  = 10*log10(PIRE_W_rx)
+Prx_dBW      = PIRE_dBW_rx - Lt_dB + G_PH_dB - Lb_dB
 
-Prx_dBW =10*log10(Prx_W)
 
 CAG      = 10^(CAG_dB/10);
 F_CAG_dB = 8;
-f_CAG    = 10^(F_CAG_dB/10);
+F_CAG    = 10^(F_CAG_dB/10);
 
-T_antes_dispositivo = T0*(CAG/Lt) + T0*(Lt-1)*(CAG/Lt)
+T_antes_dispositivo = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) +T0*(F_CAG-1)
 
-CNoR = Prx_W-10*log10(Boltzman*T_antes_dispositivo)
+CNoR = Prx_dBW-10*log10(Boltzman*T_antes_dispositivo)
 
 % c)    Calcular el campo parásito que aparece en condiciones de máximo desvanecimiento
 Distancia = Distancia/1000;f=f/(1e9);  
@@ -119,9 +118,9 @@ C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
 
-MD = CAG;
+MD_dB = CAG_dB;
 
-logaritmo = log10(MD/F_001_PH*C1);
+logaritmo = log10(MD_dB/F_001_PH*C1);
 
 soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
 x = max(soluciones_x);
@@ -143,15 +142,14 @@ XPD_ll = U - V*log10(Fq_dB);
 
 Distancia = Distancia*1000;f=f*(1e9);  
 
-EespacioLibre    = sqrt(Flujo_W*120*pi)
-%                  PIRE_W/(4*pi*d^2*10^(Lad_dB/10)*10^(Fll_dB/10))
-EespacioLibre_dBu = 10*log10(EespacioLibre*1e6)
+EespacioLibre     = sqrt(Flujo_W*120*pi)
+
+EespacioLibre_dBu = 20*log10(EespacioLibre/1e-6)
 
 
-Eparasito_total_dBu = EespacioLibre_dBu - MD-XPD_ll
+Eparasito_total_dBu = EespacioLibre_dBu - MD_dB - XPD_ll
 
 
 % 1828.8 Ttotal
 % cnrR 86
-
 % ePARASITO= 6.4DBu

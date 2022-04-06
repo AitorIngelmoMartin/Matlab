@@ -146,11 +146,13 @@ F1_dB = 6;
 F1 = 10^(F1_dB/10);
 L2_dB = 12;
 L2 = 10^(L2_dB/10);
-
+F2_dB =14;
+F2 = 10^(F2_dB/10);
 CNR_dB = Eb_N0_dB + 10*log10(Rb_bps/Bn);
 
-T_antes_dispositivo = T0*(G1)/(Lt*L2) + T0*(Lt-1)*((G1)/(L2*Lt)) + T0*(F1-1)*((G1)/(L2)) + T0*(L2-1)*(1/L2) %+ T0*(F2-1)*(G2)
 
+T_antes_dispositivo = T0*(G1/(Lt*L2)) + T0*(Lt-1)*(G1/(L2*Lt)) + T0*(F1-1)*(G1/L2) + T0*(L2-1)*(1/L2) + T0*(F2-1)
+% 2306
 Thx_dBW        = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 1
 
 Prx_antena_dBm = Ptx_dBm + Gantena_dB - Lt_dB + Gantena_dB - Lt_dB - Lb_dB - Lbf_dB + G1_dB  -L2_dB% Prec_antena_dBm = Prx_total_dBm + ;
@@ -158,8 +160,8 @@ Prx_antena_dBm = Ptx_dBm + Gantena_dB - Lt_dB + Gantena_dB - Lt_dB - Lb_dB - Lbf
 % Prx_Total_antena_dBm = Prx_antena_dBm + G1_dB  -L2_dB
 PIRE_dBm             = Prx_antena_dBm + Gantena_dB - Lt_dB
 
-Th_dBm  = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 1 +30 % el "+30" es para pasar a dBm
+Th_dBm      = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 1 +30 % el "+30" es para pasar a dBm
 
-Prx_dBm = MD_dB + Th_dBm
+Prx_dBm     = MD_dB + Th_dBm
 PIRE_watios = Prx_dBm + Gantena_dB - Lt_dB + G1_dB  - L2_dB
 % Salen -5.8 de pérdidas finales en el 4  y PIRE 71.47 Ttot = 
