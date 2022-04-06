@@ -89,7 +89,7 @@ CAG      = 10^(CAG_dB/10);
 F_CAG_dB = 8;
 f_CAG    = 10^(F_CAG_dB/10);
 
-T_antes_dispositivo = T0*(CAG/Lt) + T0*(Lt-1)*(CAG/Lt) + T0*(f_CAG-1)*(CAG)
+T_antes_dispositivo = T0*(CAG/Lt) + T0*(Lt-1)*(CAG/Lt)
 
 CNoR = Prx_W-10*log10(Boltzman*T_antes_dispositivo)
 
@@ -149,3 +149,9 @@ EespacioLibre_dBu = 10*log10(EespacioLibre*1e6)
 
 
 Eparasito_total_dBu = EespacioLibre_dBu - MD-XPD_ll
+
+
+% 1828.8 Ttotal
+% cnrR 86
+
+% ePARASITO= 6.4DBu

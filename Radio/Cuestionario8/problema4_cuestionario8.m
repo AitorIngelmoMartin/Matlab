@@ -66,7 +66,7 @@ P = (2/3^0.5)*(((K*R0*(h1+h2)+(Distancia^2)/4)))^0.5;
 if(h1>h2)
     Thau = acos((2*K*R0*(h1-h2)*Distancia)/P^3);
     d1 = Distancia/2+P*cos((pi+Thau)/3);
-    d2=Distancia-d1;
+    d2 = Distancia-d1;
 else
     Thau = acos((2*K*R0*(h2-h1)*Distancia)/P^3);
     d2 = Distancia/2+P*cos((pi+Thau)/3);
@@ -104,7 +104,7 @@ Lb_dB = Lgases_dB + Lref_dB;
 
 Distancia = Distancia/1000;f=f/(1e9);
 % PH
-K_PH = 0.07078;
+K_PH     = 0.07078;
 Gamma_PH = K_PH *(R_001^Alpha_PH)  % dB/Km
 
 termino1 = 0.477*(Distancia^0.633)*(R_001^(0.073*Alpha_PH))*(f^(0.123));
@@ -133,7 +133,7 @@ x =max(soluciones_x);
 q_calculado = 10^x
 
 Ulluvia=q_calculado;
-UR_total = Ulluvia + (3*MTTR/MTBF)*100; %Indisponibilidad total, UR_lluvia + UR_equipos
+UR_total = Ulluvia + (2*MTTR/MTBF)*100; %Indisponibilidad total, UR_lluvia + UR_equipos
 
 % PIRE_dBm = Ptx_dBm  + G_dB - Lt_dB
 % Prx_dBm  = PIRE_dBm + G_dB - Lb_dB - Lt_dB -Lbf_dB
@@ -146,21 +146,20 @@ F1_dB = 6;
 F1 = 10^(F1_dB/10);
 L2_dB = 12;
 L2 = 10^(L2_dB/10);
-F2_dB = 14;
-F2 = 10^(F2_dB/10);
-G2_dB = 20;
-G2 = 10^(G2_dB/10);
 
 CNR_dB = Eb_N0_dB + 10*log10(Rb_bps/Bn);
 
-T_antes_dispositivo = T0*((G1*G2)/(Lt*L2)) + T0*(Lt-1)*((G1*G2)/(L2*Lt)) + T0*(F1-1)*((G1*G2)/(L2)) + T0*(L2-1)*(G2/L2) + T0*(F2-1)*(G2)
+T_antes_dispositivo = T0*(G1)/(Lt*L2) + T0*(Lt-1)*((G1)/(L2*Lt)) + T0*(F1-1)*((G1)/(L2)) + T0*(L2-1)*(1/L2) %+ T0*(F2-1)*(G2)
 
-degradacion = (1+roll_off)*(Rb_bps/log2(Simbolos))
+Thx_dBW        = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 1
 
-Thx_dBW = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn)+10*log10(degradacion)
+Prx_antena_dBm = Ptx_dBm + Gantena_dB - Lt_dB + Gantena_dB - Lt_dB - Lb_dB - Lbf_dB + G1_dB  -L2_dB% Prec_antena_dBm = Prx_total_dBm + ;
 
-Prx_total_dBm = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 30 % "+30" para apsar a dBm
+% Prx_Total_antena_dBm = Prx_antena_dBm + G1_dB  -L2_dB
+PIRE_dBm             = Prx_antena_dBm + Gantena_dB - Lt_dB
 
-Prec_antena_dBm = Prx_total_dBm - G2 + L2 - G1;
+Th_dBm  = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 1 +30 % el "+30" es para pasar a dBm
 
-PIRE_dBm = Prec_antena_dBm + Lb_dB + Lbf_dB - Gantena_dB + Lt_dB;
+Prx_dBm = MD_dB + Th_dBm
+PIRE_watios = Prx_dBm + Gantena_dB - Lt_dB + G1_dB  - L2_dB
+% Salen -5.8 de pérdidas finales en el 4  y PIRE 71.47 Ttot = 

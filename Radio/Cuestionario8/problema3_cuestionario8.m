@@ -37,13 +37,10 @@ Lb_dB     = Lbf_dB + Lgases_dB;
 %Como no dan figura de ruido del amplificador, supongo que es ideal f=1
 T_antes_dispositivo = T0/Lt2 + T0*(Lt2-1)/Lt2 + T0*(Figura_ruido_Rx-1)
 
-
 Prx_dBm = Ptx_dBm + G1_dB + G2_dB - Lb_dB -Lt1_dB -Lt2_dB
 Bn = Rb_bps/log2(16);
-degradacion = (1+Roll_Off)*Bn
 
-
-Th_dBm = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) - 1 +30 %10*log10(degradacion) +30% el "+30" es para pasar a dBm
+Th_dBm = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 1 +30 % el "+30" es para pasar a dBm
 
 MD_dB  =  Prx_dBm - Th_dBm
 

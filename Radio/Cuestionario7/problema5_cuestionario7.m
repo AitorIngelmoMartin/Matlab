@@ -12,10 +12,9 @@ q   = 0.1;
 
 
 Ptx_dBm    = 10*log10(Ptx*1000);
-G_dBi      = 24;
 lambda     = c/f;
 K_PH       = 0.0708;  
-G_dB       = G_dBi-2.14;
+G_dB       = 24;
 R_001      = 32;% mm/Km
 Lt_dB      = 2;
 Umbral_dBm = -96;
@@ -64,6 +63,7 @@ end
     
 Lbf_dB    = 20*log10((4*pi*Distancia/lambda));      
 Lbf_dB    = 2.5;
+
 Distancia = 35;f=18;  
 
 Lgases_dB = 0.060*Distancia; 
@@ -87,10 +87,19 @@ C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
 
 Fq_dB   = F_001*C1*(q^(-(C2+C3*log10(q))))
+
+% MD_dB = Fq_dB
+% logaritmo = log10(MD_dB/(F_001*C1));
+% 
+% soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
+% x =max(soluciones_x);
+% q_calculado = 10^x
+
 Prx_dBm = Ptx_dBm + G_dB - Lt_dB - Lbf_dB - Lgases_dB - Ldif_dB + G_dB - Lt_dB - Fq_dB
 
 Prx1_dBm =  -Umbral_dBm+Fq_dB;
 
 % Umbral_W = 2*MTTR*(100/MTBF_horas)
-MTTR= Umbral_W*(MTBF_horas/2*100) 
+MTTR= + Umbral_W*(MTBF_horas)/(2*100)
+
 

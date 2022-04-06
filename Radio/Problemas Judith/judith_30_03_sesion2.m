@@ -23,7 +23,7 @@ Lad       = 10^(Lad_dB/10);
 % 0.5 por cada antena + 0.5 por desporalizacion
 PIRE_w   = FLUJO_w*(4*pi*Distancia^2)*Lad;
 
-PIRE_dBw =10*log10(PIRE_w)-(10*log10(10))
+PIRE_dBw =10*log10(PIRE_w)-(10*log10(10)) %La pire up
 
 % *-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
