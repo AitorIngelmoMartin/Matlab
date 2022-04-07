@@ -148,8 +148,3 @@ EespacioLibre_dBu = 20*log10(EespacioLibre/1e-6)
 
 
 Eparasito_total_dBu = EespacioLibre_dBu - MD_dB - XPD_ll
-
-
-% 1828.8 Ttotal
-% cnrR 86
-% ePARASITO= 6.4DBu

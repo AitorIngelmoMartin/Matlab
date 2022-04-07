@@ -8,7 +8,7 @@ Re  = K*R0;
 h1  = 235;
 h2  = 312;
 Ptx = 2;
-q   = 0.1;
+U   = 0.1; %Indisponibilidad total en porcentaje
 
 
 Ptx_dBm    = 10*log10(Ptx*1000);
@@ -61,8 +61,7 @@ if(Difracc_O1>-0.78 && Difracc_O2<-0.78)
     Ldif_dB   = 6.9 + 20*log10(sqrt((Difracc_O1-0.1)^2+1)+Difracc_O1-0.1)
 end
     
-Lbf_dB    = 20*log10((4*pi*Distancia/lambda));      
-Lbf_dB    = 2.5;
+Lbf_dB    = 20*log10((4*pi*Distancia/lambda));
 
 Distancia = 35;f=18;  
 
@@ -86,20 +85,18 @@ C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
 
-Fq_dB   = F_001*C1*(q^(-(C2+C3*log10(q))))
+MD_dB = Ptx_dBm - Umbral_dBm + G_dB - Lt_dB - (Lbf_dB + Lgases_dB + Ldif_dB) + G_dB - Lt_dB;
+Fq_dB= MD_dB;
 
-% MD_dB = Fq_dB
-% logaritmo = log10(MD_dB/(F_001*C1));
-% 
-% soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
-% x =max(soluciones_x);
-% q_calculado = 10^x
+logaritmo = log10(MD_dB/(F_001*C1));
 
-Prx_dBm = Ptx_dBm + G_dB - Lt_dB - Lbf_dB - Lgases_dB - Ldif_dB + G_dB - Lt_dB - Fq_dB
+soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
+x =max(soluciones_x);
+q_calculado = 10^x
 
-Prx1_dBm =  -Umbral_dBm+Fq_dB;
+UR_lluvia = q_calculado;
 
 % Umbral_W = 2*MTTR*(100/MTBF_horas)
-MTTR= + Umbral_W*(MTBF_horas)/(2*100)
+MTTR= + (U-UR_lluvia)*(MTBF_horas)/(2*100)
 
 

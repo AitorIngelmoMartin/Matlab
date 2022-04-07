@@ -1,13 +1,5 @@
 clear;close all;clc;
 
-
-% Estación receptora con LNA de figura de ruido de 6dB y ganancia 20dB, un mezclador con pérdidas 12dB y 
-% un amplificador en frecuencia intermedia con figura de ruido de 14dB. 
-% Este último amplificador cuenta con un control automático de potencia que permite amplificar hasta 20dB. 
-% El requisito de Eb/N0 es de 16dB para un filtro ideal. El MTTR es de 4 horas y el MTBF de 468.000 horas. 
-
-% Determinar la PIRE y la indisponibilidad del enlace.
-
 f  = 18e9;
 c  = 3e8;
 R0 = 6370000;
@@ -28,8 +20,8 @@ Conductividad         = 0.001;
 Permeavilidad_terreno = 15;
 Rugosidad = 0.2;
 Gantena_dB = 9;
-h1 =210;
-h2 =54;
+h1 = 210;
+h2 = 54;
 
 K = 4/3;
 Eb_N0_dB = 16;
@@ -45,20 +37,6 @@ T0      = 290;
 
 Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
 Lgases_dB = alfa_gas*(Distancia/1000);
-
-termino1 = K*R0+h1;
-termino2 = K*R0;
-termino3 = K*R0+h2;
-termino4 = K*R0;
-Dmax     = sqrt(termino1^2 - termino2^2)+sqrt(termino3^2 - termino4^2);
-
-if(Distancia<0.1*Dmax) 
-    %Código ejecutado si tierra plana
-    Caso = "Tierra plana"
-else
-    %Código ejecutado si tierra curva
-    Caso = "Tierra curva"
-end
 
 
 P = (2/3^0.5)*(((K*R0*(h1+h2)+(Distancia^2)/4)))^0.5; 
@@ -100,10 +78,9 @@ else
 end
 
 Lb_dB = Lgases_dB + Lref_dB;
-% *-*-*-*-*-*-*-
 
 Distancia = Distancia/1000;f=f/(1e9);
-% PH
+
 K_PH     = 0.07078;
 Gamma_PH = K_PH *(R_001^Alpha_PH)  % dB/Km
 
@@ -128,15 +105,12 @@ C3 = (0.139*C0) + 0.043* (1-C0);
 
 logaritmo = log10(MD_dB/(F_001_PH*C1));
 
-soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
-x =max(soluciones_x);
+soluciones_x = [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
+x = max(soluciones_x);
 q_calculado = 10^x
 
-Ulluvia=q_calculado;
+Ulluvia  = q_calculado;
 UR_total = Ulluvia + (2*MTTR/MTBF)*100; %Indisponibilidad total, UR_lluvia + UR_equipos
-
-% PIRE_dBm = Ptx_dBm  + G_dB - Lt_dB
-% Prx_dBm  = PIRE_dBm + G_dB - Lb_dB - Lt_dB -Lbf_dB
 
 Lt_dB = 2;
 Lt = 10^(Lt_dB/10);
@@ -152,16 +126,7 @@ CNR_dB = Eb_N0_dB + 10*log10(Rb_bps/Bn);
 
 
 T_antes_dispositivo = T0*(G1/(Lt*L2)) + T0*(Lt-1)*(G1/(L2*Lt)) + T0*(F1-1)*(G1/L2) + T0*(L2-1)*(1/L2) + T0*(F2-1)
-% 2306
-Thx_dBW        = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 1
 
-Prx_antena_dBm = Ptx_dBm + Gantena_dB - Lt_dB + Gantena_dB - Lt_dB - Lb_dB - Lbf_dB + G1_dB  -L2_dB% Prec_antena_dBm = Prx_total_dBm + ;
+Thx_dBm  = CNR_dB + 10*log10(T_antes_dispositivo*Boltzman*Bn) +30
 
-% Prx_Total_antena_dBm = Prx_antena_dBm + G1_dB  -L2_dB
-PIRE_dBm             = Prx_antena_dBm + Gantena_dB - Lt_dB
-
-Th_dBm      = CNR_dB + 10*log10(Boltzman*T_antes_dispositivo*Bn) + 1 +30 % el "+30" es para pasar a dBm
-
-Prx_dBm     = MD_dB + Th_dBm
-PIRE_watios = Prx_dBm + Gantena_dB - Lt_dB + G1_dB  - L2_dB
-% Salen -5.8 de pérdidas finales en el 4  y PIRE 71.47 Ttot = 
+PIRE_dBm = Thx_dBm - Gantena_dB + Lt_dB + Lbf_dB + Lb_dB + L2_dB - G1_dB

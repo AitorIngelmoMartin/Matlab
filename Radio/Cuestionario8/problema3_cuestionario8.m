@@ -35,8 +35,8 @@ Lgases_dB = alfa_gases*Distancia/1000;
 Lb_dB     = Lbf_dB + Lgases_dB;
 
 %Como no dan figura de ruido del amplificador, supongo que es ideal f=1
-T_antes_dispositivo = T0/Lt2 + T0*(Lt2-1)/Lt2 + T0*(Figura_ruido_Rx-1)
-
+T_antes_dispositivo = T0/Lt2 + T0*(Lt2-1)/Lt2 +T0*(Figura_ruido_Rx-1)
+% T_antes_dispositivo = 1330
 Prx_dBm = Ptx_dBm + G1_dB + G2_dB - Lb_dB -Lt1_dB -Lt2_dB
 Bn = Rb_bps/log2(16);
 
