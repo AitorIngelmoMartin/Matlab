@@ -4,7 +4,7 @@ f       = f/(1e9);Distancia =Distancia/1000;
 R_001   = 29;       % mm/Km
 Alpha = 1.0025;     %Tabulando casi a 20 en PV
 
-Gamma_r  = K* R_001^Alpha %dB/Km
+Gamma_r  = K_lluvia* R_001^Alpha %dB/Km
 Deff     = (Distancia)/(0.477*(Distancia^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia))) %Km
 
 F_001    = Gamma_r * Deff % dB
