@@ -1,0 +1,26 @@
+Se está diseñando una plataforma de televisión digital por satélite que permita difundir 
+canales de televisión a toda Europa en banda Ku (14GHz- 12GHz). El satélite seleccionado para 
+proporcionar la cobertura deseada es el satélite ASTRA 1H situado en la posición orbital 19,2ºE.
+El satélite tiene una potencia a la salida del TWTA de 98W, unas pérdidas en la línea de transmisión 
+de 0,9dB y una ganancia de potencia de la antena de 30,7dB. El satélite en recepción tiene una G/T 
+de 3dB/K. La cabecera de la plataforma digital está situada en Francia, y el enlace está sometido 
+a unas pérdidas máximas por lluvia de 5dB durante el 99,9% del tiempo. 
+
+El satélite está situado a una distancia de la estación cabecera de 38500km, y el enlace ascendente
+ está sometido a unas pérdidas adicionales debidas a gases atmosféricos de 1dB. 
+Los equipos receptores de los usuarios están compuestos por una antena cuyo diámetro varía 
+en función de la posición del mismo dentro de la huella. En nuestros cálculos asumiremos que 
+los usuarios están situados en la zona central de la huella del satélite (ver figura). 
+Dicha antena tiene un rendimiento del 60%, las pérdidas en el alimentador se consideran 
+despreciables y está conectada al receptor mediante cable que introduce 0,6dB de pérdidas.
+ El receptor tiene una figura de ruido de 5dB y se estima que la antena ve una temperatura 
+de ruido de 93K. Se considera una distancia media de cualquier receptor de la zona central 
+de cobertura al satélite de 39000km A efectos de planificación, se consideran unas pérdidas 
+por lluvia máximas durante el 99,9% del tiempo en toda la zona central de cobertura de 7dB 
+en el enlace descendente. Las pérdidas adicionales en el canal descendente son de 0,8dB debidas 
+a los gases atmosféricos. 
+
+Si el enlace debe mantener una C/N0T durante el 99,9% del tiempo de 76dB:
+a)	¿Cuál es la G/T de las estaciones receptoras domésticas?
+La huella del satélite se proporciona en la imagen adjunta
+NOTA: Redondee todos los resultados intermedios a la primera cifra decima

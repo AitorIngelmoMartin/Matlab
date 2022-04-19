@@ -1,0 +1,27 @@
+Una compañía alquila un transpondedor de 36MHz para comunicar 17 sucursales de la compañía que 
+están situadas en dos zonas climáticas mediante acceso TDMA. Las sucursales de la zona climática A 
+están sometidas a una atenuación por lluvia superada en el 0,01% del tiempo de 9dB y las sucursales 
+en la zona climática B están sometidas a una atenuación por lluvia superada en el 0,01% del tiempo 
+de 16dB. Sus requisitos de transmisión, son:
+•	Velocidad de bits: 34 Mb/s
+•	Relación (EB/N0)min total: 12 dB. (para una BER de 10-4). Por debajo de esta Eb/N0 el sistema deja de tener calidad suficiente.
+Los datos técnicos del enlace, son:
+•	Frecuencias Enlaces: Ascendente 14 GHz; Descendente 11 GHz.
+•	Pérdidas adicionales: Ascendente 0,2 dB; Descendente: 0,3 dB.
+•	Margen de funcionamiento: Ascendente: 1,3dB; Descendente: 1,4 dB
+•	Relaciones G/T: Satélite: -5 dB/K; Estación Terrena: 19,1 dB/K
+•	PIRE del satélite: 48 dBW
+•	Distancia satélite-Tierra: 38200 km.
+•	Constante de Boltzmann: k = 1,38·10-23 Jul/K/Hz
+Las estaciones terrenas pueden ser equipadas con dispositivos UPC y CAG de los siguientes márgenes:
+•	UPC:6-9-12-15-18dB
+•	CAG:6-9-12-15-18dB
+
+1)	Si la modulación utilizada es 16-PSK. ¿Cuál será el valor del factor de roll-off del
+	 filtro de coseno alzado utilizado en la transmisión si se utiliza una codificación 
+	contra errores FEC 1/3? Existe una banda de guarda en los extremos de la banda de 0,15 MHz.
+
+2)	Obtenga el  parámetro de transmisión de las estaciones terrenas de ambas zonas 
+	climáticas para que el enlace funcione con la calidad requerida durante
+	 el 99,99% del tiempo. Las estaciones terrenas deben ser equipadas con los 
+	dispositivos UPC y CAG adecuados a cada zona climática
