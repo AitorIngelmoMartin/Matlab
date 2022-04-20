@@ -1,6 +1,30 @@
 
-
+EJERCICIO1
 La distancias SATELITE-TIERRA la puedo usar en flujo_satelite?
 
-El ancho de banda del ejercicio 2 lo he hecho bien?
+EJERCICIO2
+	El ancho de banda del ejercicio 2 es 500Mhz, o es 14-12Ghz.
 
+	La pire que hace al satélite estar en saturación, es la que he hecho?
+	
+	Las Lbf_down es con la distancia de 39000Km?
+	
+	Si das una banda, como el caso de Ku, puedo sacar la frecuencia de subida o bajada?
+	
+	La fórmula de G = chi*(pi*(D^2/lambda)) es la ganancia de la estación receptora?
+	Esta f´ormula d es DISH, no? 
+
+	La temperatura equivalente es al principio de la cadena de la antena, ¿no?
+
+	No sé sacar N de C/Ntotal
+
+	El M de PIRE_cielo_claro es el de símbolosm, es lo de 1.5 db por despolarizacion y todo eso¿?
+	
+	Dónde tengo que tener en cuenta los MD de lluvia?
+
+EJERCICIO5
+	El G/T de cielo claro, es el de la estación terrena o el del satélite.
+	Lo mísmo va por las pérdidas.
+	
+	
+	

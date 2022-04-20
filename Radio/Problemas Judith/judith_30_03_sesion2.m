@@ -51,8 +51,3 @@ L = CNO_total -CNO_descendente
 
 Incremento = -10*log10(10^(-L/10)-1)
 
-
-% *-*-*-*-*-
-clc;clear;
-
-

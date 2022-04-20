@@ -44,4 +44,5 @@ Roll_off     = ((BW_portadora-2*0.15e6) -1)/((Rb*(1/3))/(log2(M)));
 Flujo_sat     = (10^(PIRE_satelite_dBw/10))/(4*pi*Distancia*Distancia);
 Flujo_sat_dBw = 10*log10(Flujo_sat);
 
+
 PIRE_et_dBW   = Flujo_sat_dBw + 10*log10(4*pi*Distancia^2) + Lad_up_dB +Margen_up_dB;
