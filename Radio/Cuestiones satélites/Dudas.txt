@@ -1,30 +1,36 @@
 
-EJERCICIO1
-La distancias SATELITE-TIERRA la puedo usar en flujo_satelite?
 
-EJERCICIO2
-	El ancho de banda del ejercicio 2 es 500Mhz, o es 14-12Ghz.
+NOTAS-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
-	La pire que hace al satélite estar en saturación, es la que he hecho?
-	
-	Las Lbf_down es con la distancia de 39000Km?
-	
-	Si das una banda, como el caso de Ku, puedo sacar la frecuencia de subida o bajada?
-	
-	La fórmula de G = chi*(pi*(D^2/lambda)) es la ganancia de la estación receptora?
-	Esta f´ormula d es DISH, no? 
+En es ascendente es IBO, descendente OBO
 
-	La temperatura equivalente es al principio de la cadena de la antena, ¿no?
+En Ku subesa 14G y sales a 12G	
+	
+Para CNO_DOWN USAMOS la PIRE satelite máxima.
+Los ibo/obo de la gráfica son del transponderdor. Si tengo varias estacionesn necesito el ibo/oboportadora por estar relacionado.
 
-	No sé sacar N de C/Ntotal
+Si no dicen lo contrario, las distancias son iguales. En general si que cambian por culpa de la latitud y el punto en la órbita del satelite.
 
-	El M de PIRE_cielo_claro es el de símbolosm, es lo de 1.5 db por despolarizacion y todo eso¿?
-	
-	Dónde tengo que tener en cuenta los MD de lluvia?
+El MD no se incluye nunca. 
+En el problema es UPC con un margen igual al 0.01.
 
-EJERCICIO5
-	El G/T de cielo claro, es el de la estación terrena o el del satélite.
-	Lo mísmo va por las pérdidas.
-	
-	
-	
+C/NO = PIRE -LBF -LAD -M +G/T -10LOG10BOLTZMAN
+C/N0 = PIRE -LBF -M + G -10LOGBOLTZMAN*Ttotal
+
+C/N0Total = 1/CN0up +1/CNOdown +
+
+
+L = C/NOtotal -C/Nodescendnte
+
+En TDMA es una portadora por sentido. Lo que sube lo transforma y lo bajas.
+
+La intensidad de lluvia mdie cuanto cae en un determinado periodo de tiempo. A mayor mm/h más dañido
+
+Si no expecifican ibo/obo y es TDMA, el punto de trabajo es la PIREsat
+
+
+-----------
+Indor/outdor unit.
+Lo primero suele ser un LNA para miniminar el ruido.
+
+Modo evanescente es un modo que no se propaga. Si la frecuencia es menor que la del modo, es evanescente
