@@ -63,11 +63,19 @@ IBO_tpdr  = -4;
 OBO_tpdr  = -1.3;
 C_I0 = 83;
 
-BW_portadora        = (1 + roll_off)*(Rb*FEC/log2(M));
-BW_total_portadoras = BW_portadora
-IBO_ptdr = IBO_tpdr + 10*log10(BW_portadora/BW_total_portadoras);
-OBO_ptdr = OBO_tpdr + 10*log10(BW_portadora/BW_total_portadoras);
+Eb_N0 = 11.3;
+C_N0_objetivo = Eb_N0 + 10*log10(Rb);
 
+BW_guarda = 2*(1.5e6);
+BW_portadora        = (1 + roll_off)*(Rb.*FEC/log2(M));
+BW_total_portadoras = 8*BW_portadora + BW_guarda
+BW_total_portadoras = 36e6 - BW_guarda
+
+IBO_ptdr = IBO_tpdr + 10*log10(BW_portadora./BW_total_portadoras);
+OBO_ptdr = OBO_tpdr + 10*log10(BW_portadora./BW_total_portadoras);
+
+% IBO_tpdr = IBO_ptdr - 10*log10(BW_portadora./BW_total_portadoras)
+% OBO_tpdr = OBO_ptdr - 10*log10(BW_portadora./BW_total_portadoras)
 
 Lad_down_dB  = Lgas_down_dB + Margen_down_dB;
 PIRE_sat_dBW = SFD_dBW + 10*log10(4*pi*Distancia^2) + Lad_down_dB;
@@ -78,4 +86,5 @@ PIRE_et_dBW   = SFD_dBW - 10*log10(4*pi*Distancia^2) - Lad_up_dB ;
 C_N0_up_dB   = PIRE_et_dBW  + IBO_ptdr - Lbf_up_dB   - Lad_up_dB   - Margen_up_dB + G_T_sat_dB     - 10*log10(Boltzmann);
 C_N0_down_dB = PIRE_sat_dBW + OBO_ptdr - Lbf_down_dB - Lad_down_dB - Margen_down_dB  + G_T_terrena_dB - 10*log10(Boltzmann);
 
-c_n0_total  = 1./(1./(10.^(C_N0_up_dB./10))+ 1./(10.^(C_N0_down_dB./10)) + 1./(10.^(C_I0./10)));
+c_n0_total  = 1./(1./(10.^(C_N0_up_dB./10))+ 1./(10.^(C_N0_down_dB./10)) + 1./(10.^(C_I0./10)))
+C_N0_total  = 10*log10(c_n0_total)
