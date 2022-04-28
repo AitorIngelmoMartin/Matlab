@@ -168,7 +168,7 @@ q = 0.01;
 MD_dB = F_001;
 
  U_equipo1 = (MTTR1/MTBF1)*100
- U_equipo2 = (MTTR2/MTBF2)*100
+ U_equipo2 = (MTTR2/MTBF2)*100  
  
 G_LNA_dB = 25;
    G_LNA = 10^(G_LNA_dB/10);
