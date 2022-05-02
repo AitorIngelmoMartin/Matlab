@@ -52,7 +52,7 @@ if( (((Difracc_O1<0) ||(Difracc_O2<0) ) && (abs(Difracc_O1 -Difracc_O2)<0.5)) ||
 
         R1_A_prima      = sqrt(lambda*Distancia_entre_obstaculos*Distancia_E2_O1/Distancia_E1_O2);
         Difracc_A_prima = sqrt(2)*(Despejamiento_A_prima/R1_A_prima);
-
+% R1_A_prima= sqrt(lambda*Distancia_entre_obstaculos*Distancia_E2_O1/Distancia_E1_O2);
         %Para Ldif(uve'2)
         flecha_2p             = Distancia_entre_obstaculos*Distancia_E2_O2/(2*Re);
         altura_rayo_B_prima   = ((h2-e_O1)*Distancia_entre_obstaculos/Distancia_E2_O1)+e_O1;

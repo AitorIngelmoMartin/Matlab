@@ -93,7 +93,7 @@ end
 
              R1_1p = sqrt(lambda*do1_o2*d2(3)/d2(2)); %Altura del primer rayo de Fresnel
              uve_2p = sqrt(2)*(despejamiento_1p/R1_1p);
-  
+%   R1_A_prima= sqrt(lambda*Distancia_entre_obstaculos*Distancia_E2_O1/Distancia_E1_O2);
 %-------------------------------------------------------------------------------------
 
 
