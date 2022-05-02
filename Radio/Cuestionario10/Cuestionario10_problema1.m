@@ -31,21 +31,21 @@ Alpha = 1.0818;
 K_lluvia = 0.0708;
 % Atenuador variable frente a desvanecimientos
 % Determinar la indisponibilidad de propagación debida a la atenuación por lluvia.
-D1 = 11e3;
-D2 = D1;
+
+angulo = atand(11/3.7);
+D1     = 3.7/(cosd(angulo))*1000
 % GANANCIA DEL REFLECTOR
 angulo = atand(11/3.7);
 Ganancia_reflector    = (S_geometrica*cosd(angulo)*4*pi)/(lambda^2);
 Ganancia_reflector_dB = 10*log10(Ganancia_reflector)
 
-
 % POTENCIA RECIBIDA
 Lbf1 = 20*log10((4*pi*D1)/lambda);
 Lbf2 = Lbf1;
 
-Lb   = Lbf1  - Ganancia_reflector_dB + L_guias_dB  - Ganancia_reflector_dB +Lbf2; 
+Lb   = Lbf1 + L_guias_dB - Ganancia_reflector_dB + L_guias_dB - Ganancia_reflector_dB + Lbf2 + L_guias_dB; 
 
-Prx_dBm = Ptx_dBm + G_antena -Lb + G_antena - L_guias_dB - L_guias_dB
+Prx_dBm = Ptx_dBm + G_antena -Lb + G_antena  
 
 % DISTANCIA DEL VANO
 
@@ -55,22 +55,21 @@ Prx_dBm = Ptx_dBm + G_antena -Lb + G_antena - L_guias_dB - L_guias_dB
 % UMBRAL A LA SALIDA DE LOS TERMINALES
 Bn          = Rb/(log2(M));
 Boltzman    = 1.381e-23;
-T0 = 290;
-f_receptor = 10^(F_receptor/10);
-Lt = 10^(L_guias_dB/10);
-% T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1)
-T_despues_lt = T0*(f_receptor)
 
+T0 = 290;
+Lt = 10^(L_guias_dB/10);
+
+f_receptor   = 10^(F_receptor/10);
+T_despues_lt = T0*(1/Lt) + T0*(Lt-1) + T0*(f_receptor-1)
 Umbral_dBm   = C_N_umbral + 10*log10(T_despues_lt*Boltzman*Bn) +30
 
 % q DEBIDO A LA LLUVIA
 
-Distancia = (2*D1)/1000; f=f/(1e9);
+Distancia = (D1)/1000; f=f/(1e9);
 
-Gamma_r  = K_lluvia* R_001^Alpha; %dB/Km
-Deff     = (Distancia)/(0.477*(Distancia^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia))); %Km
-
-F_001    = Gamma_r * Deff; % dB
+Gamma_r  = K_lluvia* R_001^Alpha;
+Deff     = (Distancia)/(0.477*(Distancia^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia)));
+F_001    = Gamma_r * Deff;
 
 % En Lvbl Prx = MD+ Thx
 MD_dB = Prx_dBm - Umbral_dBm;
