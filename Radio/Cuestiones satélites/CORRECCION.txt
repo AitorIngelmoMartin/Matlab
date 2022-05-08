@@ -1,0 +1,38 @@
+Ejercicio 1
+
+3. Apartado 1.
+
+Habéis ubicado correctamente 3 portadoras, pero son cinco. 
+El ancho de banda no es correcto. El valor del ancho de banda es mayor. 
+Quizás os habéis equivocado al introducir el efecto de la codificación contra errores.
+La entrega de Jose Luis de este apartado si es correcta.
+
+4.OK
+
+5.Apartado 2
+
+C/Noup algo mayor del resultado. Comprobad que habéis restado las pérdidas adicionales y 
+el margen y que usáis la frecuencia centra del enlace para el cálculo de la Lbf. 
+C/N0 down tiene varía, probablemente debido a que el OBO no es correcto y algo más.
+
+Revisad si habéis incluido el margen en el cálculo.
+
+6.Apartado 3
+
+El OBO no es correcto. Habéis aplicado mal la fórmula. 
+El IBO se introduce en dBs y e^(ÎBO/6)es el número e elevado a IBO/6.
+ ¿Por qué obtenéis tres G/T del enlace? La G/T no varía. Si os estuvierais refiriendo 
+a la C/N0T, el valor es muy pequeño
+
+Ejercicio 2
+
+8. Apartado 1
+
+Resultado erróneo. La respuesta de Jose Luis si es correcta.
+Cotejad como lo habéis hecho.
+
+9. Apartado 2
+
+La PIRE es muy pequeña. En el caso de la respuesta de Jose Luis, 
+la PIRE sale 0,5 dBs menor, así que hay algún fallo en el proceso, 
+difícil de detectar con solo ese dato.

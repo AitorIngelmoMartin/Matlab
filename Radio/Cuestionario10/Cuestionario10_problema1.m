@@ -43,14 +43,16 @@ Ganancia_reflector_dB = 10*log10(Ganancia_reflector)
 Lbf1 = 20*log10((4*pi*D1)/lambda);
 Lbf2 = Lbf1;
 
-Lb   = Lbf1 + L_guias_dB - Ganancia_reflector_dB + L_guias_dB - Ganancia_reflector_dB + Lbf2 + L_guias_dB; 
+% Al no decir nada, supongo rendimiento de 1 y no pongo pérdidas (LT) en el
+% reflector
 
+Lb      = Lbf1 + L_guias_dB - Ganancia_reflector_dB - Ganancia_reflector_dB + Lbf2 + L_guias_dB; 
 Prx_dBm = Ptx_dBm + G_antena -Lb + G_antena  
 
 % DISTANCIA DEL VANO
 
-%   Vano es la distancia entre dos antenas, por lo que 22Km, la suma de los
-%   dos tramos.
+%   La diagonal = 11.6 -> Dvano = 23.21Km, que es la suma de las dos.
+
 
 % UMBRAL A LA SALIDA DE LOS TERMINALES
 Bn          = Rb/(log2(M));
@@ -60,7 +62,7 @@ T0 = 290;
 Lt = 10^(L_guias_dB/10);
 
 f_receptor   = 10^(F_receptor/10);
-T_despues_lt = T0*(1/Lt) + T0*(Lt-1) + T0*(f_receptor-1)
+T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1)
 Umbral_dBm   = C_N_umbral + 10*log10(T_despues_lt*Boltzman*Bn) +30
 
 % q DEBIDO A LA LLUVIA
