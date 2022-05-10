@@ -1,0 +1,37 @@
+clc; clear;
+
+%datos
+
+f_tpdor = 36e6;
+
+"Banda C"
+"TDMA"
+"QPSK"
+
+M = 4;
+
+f_up = 14e9;
+f_down = 11e9;
+
+n_tpdor = 76;
+Rb =  34e6;
+
+BW_g = 3.5e6;
+
+FEC = 5/6;
+
+PIRE_sat_dBW = 39;
+G_T_sat = -2.8;
+SFD_dBW = -90.5; %saturatioon flux density (FLUJO) en dBW/m^2
+
+PIREmax_est_dBW = 68;
+G_T_est = 28;
+
+d = 36e6;
+Lt_dB = 1;
+
+F_001_AdB = 9;
+F_001_BdB = 16;
+
+Eb_N0_dB = 12;
+
