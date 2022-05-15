@@ -75,7 +75,7 @@ F_001    = Gamma_r * Deff;
 
 % En Lvbl Prx = MD+ Thx
 MD_dB = Prx_dBm - Umbral_dBm;
-
+f = f/1e9;
 if(f>=10)
  C0 = 0.12+0.4*log10((f/10)^0.8);
 else

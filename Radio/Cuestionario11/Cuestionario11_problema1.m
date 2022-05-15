@@ -1,4 +1,3 @@
-
 clc;clear;
 
 c = 3e8;
@@ -102,7 +101,7 @@ MDmax=F_001*C1*0.001^(-C2-C3*log10(0.001));
 if MD_vano1>MDmin
  if MD_vano1<MDmax
  solucion=roots([C3 C2 log10(MD_vano1/(F_001*C1))]);
- q_uno=10^(max(solucion));
+ q=10^(max(solucion));
  else
  q=0.001;
  end
@@ -111,7 +110,7 @@ else
 end
 
 Ueq=1.5*100*(MTTR/MTBF);
-Utotalvano1=Ueq+q_uno;
+Utotalvano1=Ueq+q;
 
 %VANO 2
 
@@ -158,7 +157,7 @@ MDmax=F_001*C1*0.001^(-C2-C3*log10(0.001));
 if MD_vano2>MDmin
  if MD_vano2<MDmax
  solucion=roots([C3 C2 log10(MD_vano2/(F_001*C1))]);
- q_dos=10^(max(solucion));
+ q=10^(max(solucion));
  else
  q=0.001;
  end
@@ -167,7 +166,7 @@ else
 end
 
 Ueq=1.5*100*(MTTR/MTBF);
-Utotalvano2=Ueq + q_dos;
+Utotalvano2=Ueq + q;
 
 %-----------------------------------------
 
