@@ -2,11 +2,12 @@ clc;clear
 f = 28.5e9;
 Distancia = 21e3;
 
-f       = f/(1e9);Distancia =Distancia/1000;
+f        = f/(1e9);Distancia =Distancia/1000;
 K_lluvia = 0.2051
 
+% Polarizacion
 R_001   = 29;       % mm/Km
-Alpha = 0.9679;     %Tabulando casi a 20 en PV
+Alpha   = 0.9679;     %Tabulando casi a 20 en PV
 
 Gamma_r  = K_lluvia* R_001^Alpha %dB/Km
 Deff     = (Distancia)/(0.477*(Distancia^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia))) %Km
@@ -23,10 +24,6 @@ C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
 
-if(q == 0.01)
-Fq_dB = F_001; % ya que q=0.01
-end
-
 Fq_dB   = F_001_PH*C1*(q^(-(C2+C3*log10(q))))
 
 % Calcular q -----------------------------------
@@ -38,7 +35,7 @@ x =max(soluciones_x);
 q_calculado = 10^x
 
 Fq_calculado_dB = F_001*C1*(q_calculado^(-(C2+C3*log10(q_calculado))));
-% Calcular q -----------------------------------
+% -----------------------------------
 
 U = 15 + 30*log10(f);
 

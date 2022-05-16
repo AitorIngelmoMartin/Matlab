@@ -1,36 +1,15 @@
 
+E3-a No entiendo la D de la fñormula de G_estacion_receptora. tengo que
+G_estacion_receptora    = Rendimiento*((Dish/lambda_down)*pi)^2;
+Pero no entiendo de donde sale el rendimiento.
 
-NOTAS-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+E3-b
+Tengo mal la degradación, pero no sé porqué.
+Me da 
+Degradacion =  -0.471151427571812
+Tras la correccion, pero no sé si estará bien.
 
-En es ascendente es IBO, descendente OBO
-
-En Ku subesa 14G y sales a 12G	
-	
-Para CNO_DOWN USAMOS la PIRE satelite máxima.
-Los ibo/obo de la gráfica son del transponderdor. Si tengo varias estacionesn necesito el ibo/oboportadora por estar relacionado.
-
-Si no dicen lo contrario, las distancias son iguales. En general si que cambian por culpa de la latitud y el punto en la órbita del satelite.
-
-El MD no se incluye nunca. 
-En el problema es UPC con un margen igual al 0.01.
-
-C/NO = PIRE -LBF -LAD -M +G/T -10LOG10BOLTZMAN
-C/N0 = PIRE -LBF -M + G -10LOGBOLTZMAN*Ttotal
-
-C/N0Total = 1/CN0up +1/CNOdown +
+E3-C No tengo el resultado, por lo que no sé si mi coreccion es buena
 
 
-L = C/NOtotal -C/Nodescendnte
-
-En TDMA es una portadora por sentido. Lo que sube lo transforma y lo bajas.
-
-La intensidad de lluvia mdie cuanto cae en un determinado periodo de tiempo. A mayor mm/h más dañido
-
-Si no expecifican ibo/obo y es TDMA, el punto de trabajo es la PIREsat
-
-
------------
-Indor/outdor unit.
-Lo primero suele ser un LNA para miniminar el ruido.
-
-Modo evanescente es un modo que no se propaga. Si la frecuencia es menor que la del modo, es evanescente
+E5-No tenemos feedback, me gustaría pedirte los resultados almenos.

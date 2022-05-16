@@ -34,7 +34,7 @@ Lt_dB     = 1.5;
 
 K  = 4/3;
 R0 = 6370000;
-Re= K*R0
+Re = K*R0
 
 %OBSTACULO A---------
 Distancia_E1_O1 = 3e3;

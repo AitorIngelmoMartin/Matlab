@@ -30,11 +30,11 @@ dmax = sqrt(2*Re)*(sqrt(e(1)+a(1))+sqrt(e(end)+a(end)));
 
    %parámetros
 
-    flecha = d1.*d2/(2*Re);
-    altura_rayo = ((e(end)+a(end)-e(1)-a(1))/d) * d1 + e(1)+a(1);
+    flecha        = d1.*d2/(2*Re);
+    altura_rayo   = ((e(end)+a(end)-e(1)-a(1))/d) * d1 + e(1)+a(1);
     despejamiento = e + flecha - altura_rayo;
 
-    R1 = sqrt(lambda*d1.*d2/d); %Altura del primer rayo de Fresnel
+    R1  = sqrt(lambda*d1.*d2/d); %Altura del primer rayo de Fresnel
     uve = sqrt(2)*despejamiento./R1;
 
 

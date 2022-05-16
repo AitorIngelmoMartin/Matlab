@@ -1,29 +1,30 @@
+clc;clear;
 %  ADVERTENCIA: Cambiar Rh/Rv
 
 % Con:
 %     Conductividad = S/m
 %     Permitividad  = sin unidades
 
-P = (2/3^0.5)*(((K*R0*(h1+h2)+(Distancia^2)/4)))^0.5; 
+P  = (2/3^0.5)*(((K*R0*(h1+h2)+(Distancia^2)/4)))^0.5; 
 
 if(h1>h2)
     Thau = acos((2*K*R0*(h1-h2)*Distancia)/P^3);
-    d1 = Distancia/2+P*cos((pi+Thau)/3);
-    d2=Distancia-d1;
+    d1   = Distancia/2+P*cos((pi+Thau)/3);
+    d2   = Distancia-d1;
 else
     Thau = acos((2*K*R0*(h2-h1)*Distancia)/P^3);
-    d2 = Distancia/2+P*cos((pi+Thau)/3);
-    d1=Distancia-d2;
+    d2   = Distancia/2+P*cos((pi+Thau)/3);
+    d1   = Distancia-d2;
 end
 
 H2 = h2 - (d2^2)/(2*K*R0);
 H1 = h1 - (d1^2)/(2*K*R0);
 
 Phi_comparativo = 1000*atan(H1/d1);
-Phi_lim = (5400/(f/1e6))^(1/3);
-Phi =Phi_comparativo/1000;
+Phi_lim         = (5400/(f/1e6))^(1/3);
+Phi             = Phi_comparativo/1000;
 
-Epsilon0    = Permeavilidad_terreno -1i*60*Conductividad*lambda;
+Epsilon0 = Permeavilidad_terreno -1i*60*Conductividad*lambda;
 
 if(Polarizacion == "Horizontal")    
     numerador   = Epsilon0*sin(Phi) - sqrt(Epsilon0-(cos(Phi)*cos(Phi)));
