@@ -26,7 +26,7 @@ Boltzman      = 1.381e-23;
 Eb_No_ideal = 12.5;
 % Las estaciones cuentan con un atenuador variable para compensar las variabilidades de la señal recibida
 % • Polarización horizontal
-Gamma_gases =0.2;
+Gamma_gases  = 0.06;
 K_lluvia     = 0.07078;
 Alpha = 1.0818;
 % • MTBF=7,5·10^5 horas y MTTR=6 horas
@@ -104,8 +104,7 @@ T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(F_receptor-1)
 
 Bn = Rb/log2(M);
 
-C_N0_ideal       = Eb_No_ideal + 10*log10(Rb);
-Umbral_ideal_dBm = C_N0_ideal  + 10*log10(T_despues_lt*Boltzman*Bn) + 30
+Umbral_ideal_dBm = Eb_No_ideal  + 10*log10(T_despues_lt*Boltzman*Rb) + 30
 
 
 % INTERFERENCIA ESTACION B
@@ -120,4 +119,11 @@ Alfa_llegada_C = acosd(5/Distancia_DC);
 D1_D = 15;
 D2_D = 20;
 
-Interferencia_D
+% Interferencia_D
+
+Degradacion_umbral = Umbral_ideal_dBm - Eb_No_ideal - 10*log10(T_despues_lt*Boltzman*Rb) - 30
+
+% (0,47·(CIR(dB)-3))
+10*log10(3)
+
+3/0.47

@@ -57,7 +57,7 @@ Bn = Rb_bps/(log2(M));
 f_receptor   = 10^(F_receptor/10);
 T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1)
 
-Gamma_gases = 0.07;
+Gamma_gases = 0.02;
 Lgases_dB   = Gamma_gases*Distancia/1000;
 Lbf_dB      = 20*log10((4*pi*Distancia)/lambda);
 Lb_dB = Lbf_dB + Lgases_dB;
@@ -65,10 +65,21 @@ Lb_dB = Lbf_dB + Lgases_dB;
 Umbral_ideal_dBm = CNR_ideal  + 10*log10(T_despues_lt*Boltzman*Bn) + 30
 
 PIRE_dBm = Umbral_ideal_dBm + Lb_dB - G_dB + Lt_dB - G_dB + Lt_dB
-% 3) Comprobar la viabilidad del enlace A-B teniendo en cuenta el efecto sólo de las interferencias intrasistema cocanales y asumiendo que todas las estaciones transmiten con 4dBm: demostrar que la potencia recibida en condiciones normales es mayor que el umbral en cada vano.
+% 3) Comprobar la viabilidad del enlace A-B teniendo en cuenta el efecto 
+% sólo de las interferencias intrasistema cocanales y asumiendo que todas
+% las estaciones transmiten con 4dBm: demostrar que la potencia recibida 
+% en condiciones normales es mayor que el umbral en cada vano.
+Distancia = [28 14]*1e3;
+
+Lgases_dB = Gamma_gases*Distancia/1000;
+Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
+Lb_dB     = Lbf_dB + Lgases_dB;
+
 
 % DATOS:
-% CIR                                 Degradación del umbral
-% CIR≥30dB                      1dB
+% CIR            Degradación del umbral
+% CIR≥30dB               1dB
 % 20dB≤CIR<30dB          3dB
 % 10dB≤CIR<20dB          10dB
+
+
