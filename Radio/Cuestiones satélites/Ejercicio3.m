@@ -1,6 +1,6 @@
 clc;clear;close all;
 
-c = 3e8;
+
 % Datos satelite transmisor
  Ku    = (14- 12)*1e9;
  Ptx_w = 98;
@@ -17,21 +17,21 @@ T_antena     = 93;
 C_N0_total   = 76;
 Distancia    = 38500e3;
 Lgas_down_dB = 1;
-Lt_dB        = 0.6;
+Lt_up_dB        = 0.6;
 F_001_down   = 7;
 Lad_down_dB  = 0.8;
 Lad_up_dB    = 1;
 F_receptor_dB  = 5;
 T_ruido_antena = 93;
 
-Distancia = 39000e3;
+Distancia_down = 39000e3;
 Boltzmann = 1.38e-23;
 Ptx_dBw   = 10*log10(Ptx_w);
 
 %1) ¿Cuál es la G/T de las estaciones receptoras domésticas?
 
-lambda_down = c/f_down;
-lambda_up   = c/f_up;
+lambda_down = 3e8/f_down;
+lambda_up   = 3e8/f_up;
 Dish = 60/100;
 G_estacion_receptora    = Dish*((Dish/lambda_down)*pi)^2;
 G_estacion_receptora_dB = 10*log10(G_estacion_receptora);

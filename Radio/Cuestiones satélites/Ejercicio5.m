@@ -22,34 +22,31 @@ Distancia = 39000e3;
 % Los parámetros del satélite son:
     BW_transpondedor     = 36e6;
     BW_guarda            = 1.5e6;
-    SFD_dBW              = -98;
-    G_T_sat_dB               = 10;
+    Flujo_satelite_dBw   = -98;
+    G_T_sat_dB           = 10;
     PIRE_saturacion_dBw  = 52; 
 % Los parámetros de las estaciones terrenas son:
-    G_antena_dB = 40;
-    Tantena     = 22;
-    Lt_dB       = 0.3;
-    G_LNA_dB    = 40;
-    FLNA_dB     = 0.5;
+    G_terrena_dB = 40;
+    Tantena      = 22;
+    Lt_dB        = 0.3;
+    G_LNA_dB     = 40;
+    FLNA_dB      = 0.5;
     
 T0 = 290;
 Ttotal_receptor = Tantena +T0*(10^(Lt_dB/10)-1) + T0*(10^(FLNA_dB/10)-1)*10^(Lt_dB/10)
     
 % 1)Calcule la PIRE en cielo claro para cada estación terrena para el punto de saturación.
-Eb_No = 11.7; % mirado en tabla
-C_N_total = Eb_No + 10*log10(Rb)
+Eb_No     = 11.7; % mirado en tabla
+C_N_total = Eb_No + 10*log10(Rb);
 
-Lbf_up_dB   = 20*log10((4*pi*Distancia)/f_up)
-Lbf_down_dB = 20*log10((4*pi*Distancia)/f_down)
+Lbf_up_dB   = 10*log10((4*pi*Distancia*Distancia));
+Lbf_down_dB = 10*log10((4*pi*Distancia*Distancia));
 
-PIRE_cielo_claro = C_N_total + Lbf_up_dB + Lgas_up_dB + Margen_up_dB - G_T_sat_dB + 10*log10(Boltzmann)
-
+PIRE_total     = Flujo_satelite_dBw + Lbf_up_dB + Lgas_up_dB + Margen_up_dB
+PIRE_portadora = PIRE_total + 0 + 10*log10(Rb/sum(Rb))
 
 % 2) Calcular la G/T de las estaciones terrenas.
-
-G_T_terrena_dB  = C_N_total + Lbf_up_dB + Lgas_up_dB + Margen_up_dB - PIRE_saturacion_dBw  + 10*log10(Boltzmann)
-
-
+G_T_terrena_dB  = G_terrena_dB - 10*log10(Ttotal_receptor)
 
 % 3)Si el punto de trabajo óptimo es el definido por un IBO=-4 dB y 
 % un OBO=-1,3 dB de salida, y la C/I0 para ese punto de trabajo es para todas
@@ -58,18 +55,17 @@ G_T_terrena_dB  = C_N_total + Lbf_up_dB + Lgas_up_dB + Margen_up_dB - PIRE_satur
 % de las estaciones, y en caso de que para alguna de ellas no se 
 % cumpla, proponga posibles soluciones para esa estación concreta
 
-
 IBO_tpdr  = -4;
 OBO_tpdr  = -1.3;
 C_I0 = 83;
 
-Eb_N0 = 11.3;
+Eb_N0 = 11.5;
 C_N0_objetivo = Eb_N0 + 10*log10(Rb);
 
 BW_guarda = 2*(1.5e6);
 BW_portadora        = (1 + roll_off)*(Rb.*FEC/log2(M));
-BW_total_portadoras = 8*BW_portadora + BW_guarda
-BW_total_portadoras = 36e6 - BW_guarda
+BW_total_portadoras = 8*BW_portadora;
+BW_total_portadoras = 36e6 - BW_guarda;
 
 IBO_ptdr = IBO_tpdr + 10*log10(BW_portadora./BW_total_portadoras);
 OBO_ptdr = OBO_tpdr + 10*log10(BW_portadora./BW_total_portadoras);
@@ -78,13 +74,13 @@ OBO_ptdr = OBO_tpdr + 10*log10(BW_portadora./BW_total_portadoras);
 % OBO_tpdr = OBO_ptdr - 10*log10(BW_portadora./BW_total_portadoras)
 
 Lad_down_dB  = Lgas_down_dB + Margen_down_dB;
-PIRE_sat_dBW = SFD_dBW + 10*log10(4*pi*Distancia^2) + Lad_down_dB;
+PIRE_sat_dBW = Flujo_satelite_dBw + 10*log10(4*pi*Distancia^2) + Lad_down_dB;
 
 Lad_up_dB   = Lgas_up_dB + Margen_up_dB;
-PIRE_et_dBW   = SFD_dBW - 10*log10(4*pi*Distancia^2) - Lad_up_dB ;
+PIRE_et_dBW = Flujo_satelite_dBw - 10*log10(4*pi*Distancia^2) - Lad_up_dB ;
 
 C_N0_up_dB   = PIRE_et_dBW  + IBO_ptdr - Lbf_up_dB   - Lad_up_dB   - Margen_up_dB + G_T_sat_dB     - 10*log10(Boltzmann);
 C_N0_down_dB = PIRE_sat_dBW + OBO_ptdr - Lbf_down_dB - Lad_down_dB - Margen_down_dB  + G_T_terrena_dB - 10*log10(Boltzmann);
 
-c_n0_total  = 1./(1./(10.^(C_N0_up_dB./10))+ 1./(10.^(C_N0_down_dB./10)) + 1./(10.^(C_I0./10)))
-C_N0_total  = 10*log10(c_n0_total)
+c_n0_total  = 1./(1./(10.^(C_N0_up_dB./10))+ 1./(10.^(C_N0_down_dB./10)) + 1./(10.^(C_I0./10)));
+C_N0_total  = 10*log10(c_n0_total);

@@ -60,7 +60,7 @@ T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1)
 Gamma_gases = 0.02;
 Lgases_dB   = Gamma_gases*Distancia/1000;
 Lbf_dB      = 20*log10((4*pi*Distancia)/lambda);
-Lb_dB = Lbf_dB + Lgases_dB;
+Lb_dB       = Lbf_dB + Lgases_dB;
 
 Umbral_ideal_dBm = CNR_ideal  + 10*log10(T_despues_lt*Boltzman*Bn) + 30
 

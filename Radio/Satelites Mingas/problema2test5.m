@@ -1,3 +1,4 @@
+clc;clear;
 %Problema2test5
 B=36e6;
 F001A=9;
@@ -19,10 +20,11 @@ Bg=0.15e6;
 Cod=1/3;
 Md=1.5;
 Ma=1.5;
+M = 16;
 %a
 Bportadora=B-2*Bg;
 Rcod=Rb*(1/Cod);
-Rs=Rcod/(log2(16));
+Rs=Rcod/(log2(M));
 rolloff=(Bportadora/Rs)-1;
 %b
 lbfas=20*log10((4*pi*d)/lamdaas);

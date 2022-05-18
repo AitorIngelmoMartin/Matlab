@@ -1,3 +1,4 @@
+clc;clear
 %problema3test5
 fas=15e9;
 fdes=12e9;
