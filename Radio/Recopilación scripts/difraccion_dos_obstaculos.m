@@ -15,11 +15,11 @@ Distancia_E1_O1 = 1.910e3;
 Distancia_E2_O1 = Distancia - Distancia_E1_O1;
 e_O1            = 803;
 
-Flecha_O1        = (Distancia_E1_O1*Distancia_E2_O1)/(2*K*R0);
+Flecha_O1       = (Distancia_E1_O1*Distancia_E2_O1)/(2*K*R0);
 
-AlturaRayo_O1    = ((h2-h1)/Distancia)*Distancia_E1_O1 + h1;
+AlturaRayo_O1   = ((h2-h1)/Distancia)*Distancia_E1_O1 + h1;
 
-Despejamiento_O1 = Flecha_O1 + e_O1-AlturaRayo_O1;
+Despejamiento_O1= Flecha_O1 + e_O1-AlturaRayo_O1;
 
 Rfresnell_O1 = sqrt((lambda*Distancia_E1_O1*Distancia_E2_O1)/(Distancia_E1_O1+Distancia_E2_O1))
 

@@ -14,7 +14,7 @@ clc;clear;close all;
 G_T_satelite = 3;
 T_antena     = 93;
 
-C_N0_total   = 76;
+C_N0_total_dB   = 76;
 Distancia    = 38500e3;
 Lgas_down_dB = 1;
 Lt_up_dB        = 0.6;
@@ -56,15 +56,20 @@ Lbf_down_dB = 20*log10((4*pi*Distancia)/lambda_down);
 Lbf_up_dB = 20*log10((4*pi*Distancia)/lambda_up);
 
 Margen = 1.5;
-C_N0_down = PIRE_sat_dBW - Lbf_down_dB - Lad_down_dB - Margen + G_T_receptor_dB - 10*log10(Boltzmann);
+C_N0_down_dB = PIRE_sat_dBW - Lbf_down_dB - Lad_down_dB - Margen + G_T_receptor_dB - 10*log10(Boltzmann);
 
-Degradacion = C_N0_total - C_N0_down
+Degradacion = C_N0_total_dB - C_N0_down_dB
 
     %     Como no es mayor de 3 db, no es un enlace asimétrico
 
 % 3)Si la estación terrena de la cabecera está equipada con un UPC (uplink power control),
 % ¿Cuál es la PIRE en condiciones de cielo claro y en condiciones de máximo
 % desvanecimiento para cumplir con la normativa de calidad?
+
+
+
+C_N0_up    = 1/((10^(-C_N0_total_dB/10))-(10^(-C_N0_down_dB/10)));
+C_N0_up_dB = 10*log10(C_N0_up)
 
 
 PIRE_cielo_claro     = C_N0_total + Lbf_up_dB + Margen - G_T_receptor_dB + 10*log10(Boltzmann);
