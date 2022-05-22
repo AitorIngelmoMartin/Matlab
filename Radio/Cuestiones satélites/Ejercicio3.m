@@ -15,7 +15,7 @@ G_T_satelite = 3;
 T_antena     = 93;
 
 C_N0_total_dB   = 76;
-Distancia    = 38500e3;
+Distancia_up    = 38500e3;
 Lgas_down_dB = 1;
 Lt_up_dB        = 0.6;
 F_001_down   = 7;
@@ -52,13 +52,13 @@ G_T_receptor_dB  = G_estacion_receptora_dB - 10*log10(T_total_receptor)
 Ptx_dBw = 10*log10(Ptx_w);
 PIRE_sat_dBW = Ptx_dBw + G_dB - Lt_dB;
 
-Lbf_down_dB = 20*log10((4*pi*Distancia)/lambda_down);
-Lbf_up_dB = 20*log10((4*pi*Distancia)/lambda_up);
+Lbf_down_dB = 20*log10((4*pi*Distancia_down)/lambda_down);
+Lbf_up_dB = 20*log10((4*pi*Distancia_up)/lambda_up);
 
 Margen = 1.5;
 C_N0_down_dB = PIRE_sat_dBW - Lbf_down_dB - Lad_down_dB - Margen + G_T_receptor_dB - 10*log10(Boltzmann);
 
-Degradacion = C_N0_total_dB - C_N0_down_dB
+L = C_N0_total_dB - C_N0_down_dB % Degradacion
 
     %     Como no es mayor de 3 db, no es un enlace asimétrico
 
@@ -66,12 +66,11 @@ Degradacion = C_N0_total_dB - C_N0_down_dB
 % ¿Cuál es la PIRE en condiciones de cielo claro y en condiciones de máximo
 % desvanecimiento para cumplir con la normativa de calidad?
 
-
-
+Incremento_C_N = -10*log10(10^(-L/10)-1)
 C_N0_up    = 1/((10^(-C_N0_total_dB/10))-(10^(-C_N0_down_dB/10)));
 C_N0_up_dB = 10*log10(C_N0_up)
 
 
-PIRE_cielo_claro     = C_N0_total + Lbf_up_dB + Margen - G_T_receptor_dB + 10*log10(Boltzmann);
-PIRE_desvanecimiento = C_N0_total + Lbf_up_dB + Margen - G_T_receptor_dB + 10*log10(Boltzmann) - F_001_up;
+PIRE_cielo_claro     = C_N0_total_dB + Lbf_up_dB + Margen + Lad_up_dB - G_T_receptor_dB + 10*log10(Boltzmann) + Incremento_C_N
+% PIRE_desvanecimiento = C_N0_total + Lbf_up_dB + Margen - G_T_receptor_dB + 10*log10(Boltzmann) - F_001_up;
     % No he añadido Lad.
