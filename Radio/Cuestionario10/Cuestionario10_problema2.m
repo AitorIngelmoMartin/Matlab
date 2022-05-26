@@ -44,8 +44,7 @@ C_N0      = Eb_N0 + 10*log10(Rb_bps);
 Distancia = [11 6 14]*1e3;
 Lgas_dB   = Gamma_gas*Distancia/1000;
 Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
-Lb_dB        = Lgas_dB + Lbf_dB;
-
+Lb_dB     = Lgas_dB + Lbf_dB;
 
 
 T0 = 290;
@@ -56,20 +55,16 @@ T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1)
 
 % Umbral_dBm   = C_N0 + 10*log10(T_despues_lt*Boltzman*Bn) +30;
 Umbral_dBw = Eb_N0 + 10*log10(Boltzman*T_despues_lt*Rb_bps) + Degradacion;
-PIRE_dBm   = Umbral_dBw + Lb_dB - G_Pv_dB + Lt_dB ;
-Prx_dBw    = PIRE_dBm - G_Pv_dB + Lt_dB
+Prx_dBw    = PIRE_dBw - Lb_dB + G_Pv_dB - Lt_dB 
 
-MD_dB   = Prx_dBw - Umbral_dBw
-Distancia = (Distancia)/1000; f=f/(1e9);
+MD_dB     = Prx_dBw - Umbral_dBw
+Gamma_r   = K_lluvia* R_001^Alpha;
 
-Gamma_r  = K_lluvia* R_001^Alpha;
-Deff     = (Distancia)./(0.477*(Distancia.^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia)));
-F_001    = Gamma_r .* Deff
+Deff   = (Distancia*1e-3)./(0.477*((Distancia*1e-3).^0.633)*(R_001.^(0.073*Alpha))*((f*1e-9)^(0.123))-10.579*(1-exp(-0.024*(Distancia*1e-3)))); 
+F_001  = Gamma_r .* Deff;
 
-
-
-if(f>=10)
- C0 = 0.12+0.4*log10((f/10)^0.8);
+if((f*1e-9)>=10)
+ C0 = 0.12+0.4*log10(((f*1e-9)/10)^0.8);
 else
  C0 = 0.12;    
 end
@@ -78,17 +73,15 @@ C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
 
-logaritmo = log10(MD_dB./(F_001.*C1));
+logaritmo = log10(MD_dB./(F_001*C1));
 
-soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
-
-
-x1 = [soluciones_x(1) soluciones_x(3) soluciones_x(5)];
-x2 = [soluciones_x(2) soluciones_x(4) soluciones_x(6)];
-x  = max(x1,x2);
-
-q_calculado = 10.^x
+for iteracion=1:3
+    soluciones(iteracion,:) = roots([C3 C2 logaritmo(iteracion)])
+    x(:,iteracion)  = max(soluciones(iteracion,:));
+end
+q_calculado = 10.^x;
 
 U_equipo = ((MTTR/MTBF)*100)*[1.5 1.5 2];
 
 U_total = q_calculado+U_equipo
+sum(U_total)

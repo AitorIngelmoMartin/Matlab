@@ -125,9 +125,9 @@ D2_D = 20;
 
 Incremento_Degradacion_umbral = Umbral_real_dBm - Umbral_ideal_dBm
 CIR = (Incremento_Degradacion_umbral+3)/0.47
-Interferenccia_total =Prx_BC_dBm - CIR;
+Interferenccia_total = Prx_BC_dBm -  CIR ;
 Interferencia_D = 10^(Interferenccia_total/10) - 10^(Interferencia_B/10);
 Interferencia_D = 10*log10(Interferencia_D);
 
-Prx_D = Interferencia_D - (+ G_dB - Lt_dB - D1_D - Lb_dB(2) + G_dB - Lt_dB - D2_D)
+Prx_D = Interferencia_D -(+ G_dB - Lt_dB - D1_D - Lb_dB(2) + G_dB - Lt_dB - D2_D)
 % 47,48dBm
