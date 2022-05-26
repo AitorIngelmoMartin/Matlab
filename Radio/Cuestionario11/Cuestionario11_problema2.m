@@ -13,7 +13,7 @@ BW_total = (13.25 -12.75)*1e9;
 % transmiten 8 canales con alternancia de polarizaciones. 
 % Las bandas de guarda a extremos son 15 y 23 MHz, y entre direcciones de 70 MHz.
 N =8;
-roll_off =1.4;
+roll_off =1.4-1;
 
 % Las estaciones terminales transmiten 20 dBm de potencia. 
 Ptx_dBm = 20;
@@ -43,7 +43,6 @@ Guarda_2               = 23e6;
 % BW_total = Guarda_1 +(N-1)*Separacion_canal + Separacion_direcciones + (N-1)*Separacion_canal + Guarda_2;
 Separacion_canal = (BW_total - Separacion_direcciones - Guarda_1 - Guarda_2)/(2*(N-1))
 Rb_bps           = (Separacion_canal*log2(M))/(1+roll_off)
-
 % 2) Calcular el campo eléctrico que se recibe en cada vano en condiciones normales de propagación. 
 % Datos: Considerar como velocidad binaria la máxima posible y atenuador variable frente a desvanecimientos;
 % R0.01=35mm/h
@@ -62,7 +61,7 @@ Alpha    = 1.1586;
 
 Gamma_r  = K_lluvia* R_001^Alpha; %dB/Km
 Deff     = (Distancia)./(0.477*(Distancia.^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia))); %Km
-F_001    = Gamma_r * Deff % dB
+F_001    = Gamma_r * Deff; % dB
 
 if(f>=10)
  C0 = 0.12+0.4*log10((f/10)^0.8);
@@ -94,9 +93,8 @@ Lbf_dB = 20*log10((4*pi*Distancia)/lambda);
 Lb     = Lbf_dB + Lgases_dB;
 Prx_dB = Ptx_dBm + G_dB - Lt_dB - Lb + G_dB - Lt_dB;
 
-PIRE_dBw      = Ptx_dBm + G_dB - Lt_dB -Fq_dB - 30;
-PIRE = 10.^(PIRE_dBw/10);
-e = sqrt(120*pi*PIRE.*(1./Lgases).*(1./(4*pi*Distancia.*Distancia)));
-% e = sqrt(120*pi*PIRE(1)*(1/Lgases(1))*(1/(4*pi*Distancia(1)*Distancia(1))))
+PIRE_dBm = Umbral_dBm + Fq_dB + Lbf_dB -G_dB +Lt_dB ;
+PIRE_w   = 1e-3*10.^(PIRE_dBm/10);
 
-e_dBu   = 20*log10(e/1e-6)
+e     = sqrt(30*PIRE_w./(Distancia.^2));
+e_dBu = 20*log10(e/1e-6)

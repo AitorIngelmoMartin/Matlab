@@ -72,5 +72,5 @@ C_N0_up_dB = 10*log10(C_N0_up)
 
 
 PIRE_cielo_claro     = C_N0_total_dB + Lbf_up_dB + Margen + Lad_up_dB - G_T_receptor_dB + 10*log10(Boltzmann) + Incremento_C_N
-% PIRE_desvanecimiento = C_N0_total + Lbf_up_dB + Margen - G_T_receptor_dB + 10*log10(Boltzmann) - F_001_up;
+PIRE_desvanecimiento = C_N0_total_dB + Lbf_up_dB + Margen - G_T_receptor_dB + 10*log10(Boltzmann) - F_001_up;
     % No he añadido Lad.
