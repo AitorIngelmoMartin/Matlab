@@ -4,7 +4,7 @@ clc;clear;
 % estudia la alternativa de diseñar el enlace a través de un reflector:
 
 % Frecuencia de trabajo: 18 GHz
-f = 18e9;
+f      = 18e9;
 lambda = (3e8)/f;
 % Régimen binario: 2 Mbps
 Rb = 2e6;
@@ -53,7 +53,6 @@ Prx_dBm = Ptx_dBm + G_antena -Lb + G_antena
 
 %   La diagonal = 11.6 -> Dvano = 23.21Km, que es la suma de las dos.
 
-
 % UMBRAL A LA SALIDA DE LOS TERMINALES
 Bn          = Rb/(log2(M));
 Boltzman    = 1.381e-23;
@@ -66,14 +65,13 @@ T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1)
 Umbral_dBm   = C_N_umbral + 10*log10(T_despues_lt*Boltzman*Bn) +30
 
 % q DEBIDO A LA LLUVIA
-
 Distancia = (D1)/1000; f=f/(1e9);
 
 Gamma_r  = K_lluvia* R_001^Alpha;
 Deff     = (Distancia)/(0.477*(Distancia^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia)));
 F_001    = Gamma_r * Deff;
 
-% En Lvbl Prx = MD+ Thx
+% En Lvbl Prx = MD + Thx
 MD_dB = Prx_dBm - Umbral_dBm;
 f = f/1e9;
 if(f>=10)
@@ -89,5 +87,5 @@ C3 = (0.139*C0) + 0.043* (1-C0);
 logaritmo = log10(MD_dB/(F_001*C1));
 
 soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
-x =max(soluciones_x);
+x = max(soluciones_x);
 q_calculado = 10^x

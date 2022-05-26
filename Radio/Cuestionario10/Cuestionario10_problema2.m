@@ -29,8 +29,9 @@ clc;clear;close all;
     Rb_bps = 15e6;
   
  % Tabulando a f=52Ghz y PV:
-    K_lluvia = 0.6901   
-    Alpha    = 0.7783
+    K_lluvia  = 0.6901 ;  
+    Alpha     = 0.7783;
+    Gamma_gas = 0.4;
 % Determinar la calidad de disponibilidad para asegurar una Eb/N0=12 dB 
 % para QPSK. 
 Eb_N0 = 12;
@@ -41,11 +42,11 @@ Boltzman  = 1.381e-23;
 C_N0      = Eb_N0 + 10*log10(Rb_bps);
 
 Distancia = [11 6 14]*1e3;
-Lgas_dB   = 1*Distancia/1000;
+Lgas_dB   = Gamma_gas*Distancia/1000;
 Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
-Lb        = Lbf_dB(1) + Lt_dB +Lgas_dB(1)  +Lbf_dB(2) +Lgas_dB(2) +Lbf_dB(3) + Lt_dB + Lgas_dB(3);
+Lb_dB        = Lgas_dB + Lbf_dB;
 
-Prx_dBm = PIRE_dBw - Lbf_dB - Lgas_dB + G_Pv_dB - Lt_dB +30
+
 
 T0 = 290;
 Lt = 10^(Lt_dB/10);
@@ -53,9 +54,12 @@ Lt = 10^(Lt_dB/10);
 f_receptor   = 10^(F_receptor/10);
 T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1)
 
-Umbral_dBm   = C_N0 + 10*log10(T_despues_lt*Boltzman*Bn) +30;
-MD_dB   = Prx_dBm - Umbral_dBm
+% Umbral_dBm   = C_N0 + 10*log10(T_despues_lt*Boltzman*Bn) +30;
+Umbral_dBw = Eb_N0 + 10*log10(Boltzman*T_despues_lt*Rb_bps) + Degradacion;
+PIRE_dBm   = Umbral_dBw + Lb_dB - G_Pv_dB + Lt_dB ;
+Prx_dBw    = PIRE_dBm - G_Pv_dB + Lt_dB
 
+MD_dB   = Prx_dBw - Umbral_dBw
 Distancia = (Distancia)/1000; f=f/(1e9);
 
 Gamma_r  = K_lluvia* R_001^Alpha;
@@ -79,9 +83,9 @@ logaritmo = log10(MD_dB./(F_001.*C1));
 soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
 
 
-x1    = [soluciones_x(1) soluciones_x(3) soluciones_x(5)];
-x2    = [soluciones_x(2) soluciones_x(4) soluciones_x(6)];
-x = max(x1,x2);
+x1 = [soluciones_x(1) soluciones_x(3) soluciones_x(5)];
+x2 = [soluciones_x(2) soluciones_x(4) soluciones_x(6)];
+x  = max(x1,x2);
 
 q_calculado = 10.^x
 
