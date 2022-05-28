@@ -1,91 +1,101 @@
 clc;clear;
-% En la figura adjunta se representa un radioenlace para enlazar dos edificios. 
-% Debido a la existencia de otro edificio situado en la línea de vista de los edificios considerados, se 
-% estudia la alternativa de diseñar el enlace a través de un reflector:
 
-% Frecuencia de trabajo: 18 GHz
-f      = 18e9;
-lambda = (3e8)/f;
-% Régimen binario: 2 Mbps
-Rb = 2e6;
-% Modulación: 128 QAM.
-M = 128;
-% Factor de roll-off: 0,2
-roll_off = 0.2;
-% Atenuación debida a gases: despreciable
-% Figura de ruido del receptor: 6 dB.
-F_receptor = 6;
-% Potencia transmitida: 29 dBm
-Ptx_dBm = 29;
-% C/N (umbral) = 9 dB
-C_N_umbral = 9;
-% Pérdidas en guías y branching: 1 dB.
-L_guias_dB = 1;
-% Antenas: Parabólicas de 36dB de ganancia.
-G_antena = 36;
-% Reflector parabólico de 1,2m^2 de superficie geométrica
-S_geometrica = 1.2;
-% ectivaR0,01=24 mm/h; α =1,0818; k=0,0708
-R_001 = 24;
-Alpha = 1.0818;
-K_lluvia = 0.0708;
-% Atenuador variable frente a desvanecimientos
-% Determinar la indisponibilidad de propagación debida a la atenuación por lluvia.
+f = 23e9;
+lambda = 3e8/f;
 
-angulo = atand(11/3.7);
-D1     = 3.7/(cosd(angulo))*1000
-% GANANCIA DEL REFLECTOR
-angulo = atand(11/3.7);
-Ganancia_reflector    = (S_geometrica*cosd(angulo)*4*pi)/(lambda^2);
-Ganancia_reflector_dB = 10*log10(Ganancia_reflector)
+G_dB = 35;
 
-% POTENCIA RECIBIDA
-Lbf1 = 20*log10((4*pi*D1)/lambda);
-Lbf2 = Lbf1;
+Lt_dB = 1.5;
+Lt    = 10^(Lt_dB/10);
 
-% Al no decir nada, supongo rendimiento de 1 y no pongo pérdidas (LT) en el
-% reflector
+Grf_dB = 15;
+Grf    = 10^(Grf_dB/10);
 
-Lb      = Lbf1 + L_guias_dB - Ganancia_reflector_dB - Ganancia_reflector_dB + Lbf2 + L_guias_dB; 
-Prx_dBm = Ptx_dBm + G_antena -Lb + G_antena  
 
-% DISTANCIA DEL VANO
+figura_ruido_rf_dB = 10;
+figura_ruido_rf    = 10^(figura_ruido_rf_dB/10);
 
-%   La diagonal = 11.6 -> Dvano = 23.21Km, que es la suma de las dos.
+L_mezclador_dB = 3;
+L_mezclador    = 10^(L_mezclador_dB/10);
 
-% UMBRAL A LA SALIDA DE LOS TERMINALES
-Bn          = Rb/(log2(M));
-Boltzman    = 1.381e-23;
+Gfi_dB = 20;
+Gfi    = 10^(Gfi_dB/10);
 
-T0 = 290;
-Lt = 10^(L_guias_dB/10);
+figura_ruido_fi_dB = 20;
+figura_ruido_fi    = 10^(figura_ruido_fi_dB/10);
 
-f_receptor   = 10^(F_receptor/10);
-T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1)
-Umbral_dBm   = C_N_umbral + 10*log10(T_despues_lt*Boltzman*Bn) +30
+gamma_gases  = 0.5;
+Eb_N0        = 13;
+degradacion  = 6 + 1;
+roll_off     = 0.4;
+Rb           = 50e6;
+R_001        = 27;
+alpha        = 1.0214;
+k            = 0.1286;
 
-% q DEBIDO A LA LLUVIA
-Distancia = (D1)/1000; f=f/(1e9);
+MTTR = 20;
+MTBF = 1e6;
 
-Gamma_r  = K_lluvia* R_001^Alpha;
-Deff     = (Distancia)/(0.477*(Distancia^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia)));
-F_001    = Gamma_r * Deff;
+MD_vano1  = 35;
+Distancia = [24 15]*1e3;
+K         = 1.381e-23;
 
-% En Lvbl Prx = MD + Thx
-MD_dB = Prx_dBm - Umbral_dBm;
-f = f/1e9;
-if(f>=10)
- C0 = 0.12+0.4*log10((f/10)^0.8);
+T_antena = 350;
+T0       = 290;
+
+T_total = T_antena/Lt + T0*(Lt-1)/Lt + T0*(figura_ruido_rf-1) + T0*(L_mezclador-1)/Grf + T0*(figura_ruido_fi-1)*L_mezclador/Grf;
+
+Lgases_dB = gamma_gases*Distancia/1000;
+Lbf_dB    = 20*log10(4*pi*Distancia/lambda);
+Lb_dB     = Lbf_dB+Lgases_dB;
+
+Umbral=Eb_N0+10*log10(K*T_total*Rb)+degradacion+30;
+
+PIRE_dBm = Umbral + Lb_dB - G_dB + Lt_dB ;
+Ptx_dBm  = PIRE_dBm + Lt_dB - G_dB;
+
+R_001_alpha = R_001^alpha;
+gamma_R     = k*R_001_alpha; 
+
+Deff=(0.477*(Distancia*1e-3).^0.633*R_001^(0.073*alpha)*(f*1e-9)^0.123)-(10.579*(1-exp(-0.024*(Distancia*1e-3))));
+
+if Deff<0.4
+     Lef=(Distancia.*1e-3)*2.5;
 else
- C0 = 0.12;    
+     Lef=(Distancia.*1e-3)./Deff;
 end
 
-C1 = (0.07^C0)  * (0.12^(1-C0));
-C2 = (0.855*C0) + 0.5446*(1-C0);
-C3 = (0.139*C0) + 0.043* (1-C0);
+F_001=gamma_R*Lef;
 
-logaritmo = log10(MD_dB/(F_001*C1));
+if (f*1e-9)>=10
+     C0=0.12+0.4*log10(((f*1e-9)/10)^0.8);
+else
+     C0=0.12;
+end
 
-soluciones_x =  [( -C2 + sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3),( -C2 - sqrt( C2*C2 -4*logaritmo*C3 ) )/(2*C3)];
-x = max(soluciones_x);
-q_calculado = 10^x
+C1 = (0.07^C0)*(0.12^(1-C0));
+C2 = 0.855*C0+0.546*(1-C0);
+C3 = 0.139*C0+0.043*(1-C0);
+
+% MD mínimo cuando q=1%
+MDmin=F_001*C1*1^(-C2-C3*log10(1));
+
+% MD máximo cuando q=0.001%
+MDmax=F_001*C1*0.001^(-C2-C3*log10(0.001));
+
+for iteracion=1:2
+    if MD_vano1>MDmin(iteracion)
+        if MD_vano1<MDmax
+            solucion=roots([C3 C2 log10(MD_vano1./(F_001(iteracion)*C1))]);
+            q(:,iteracion)=10^(max(solucion));
+        else
+            q=0.001;
+        end
+    else
+        q=Inf;
+    end
+end
+Ueq         = 1.5*100*(MTTR/MTBF);
+Utotalvano1 = Ueq+q;
+
+Utotal = sum(Utotalvano1);

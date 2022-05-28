@@ -1,70 +1,70 @@
-clc;clear;close all;
-% En un estudio de planificación previa se pretende evaluar la efectividad de
-% plantear un radioenlace con tres vanos y dos secciones de conmutación.
+clc;clear;
 
-% Las características de las estaciones terminales e intermedias son:
-% - Antenas Parabólicas de 48 dB de ganancia con polarización vertical
-    G_Pv_dB = 48;
-% - Frecuencia de trabajo 52 GHz
-    f = 52e9;
-    lambda = (3e8)/f;
-% - Pérdidas en los terminales de 1,4 dB
-    Lt_dB = 1.4;
-% - Modulación QPSK y filtro de coseno alzado con α=0,4 (se asume una degradación debida al filtro de 2 dB)
-    Degradacion = 2;
-% - Figura de ruido del receptor de 5 dB
-    F_receptor = 5;
-% - MTTR 40 horas
-    MTTR = 40;
-% - MTBF 2*10^6 horas
-    MTBF = 2*(1e6);
-% - PIRE=75 dBW
-    PIRE_dBw = 75;
-% - Atenuador variable
-% - R0,01=40 mm/h
-    R_001 = 40;
-% - distancia entre estaciones terminales
-    Distancia_total = 31e3;
-% - régimen binario ofrecido
-    Rb_bps = 15e6;
-  
- % Tabulando a f=52Ghz y PV:
-    K_lluvia  = 0.6901 ;  
-    Alpha     = 0.7783;
-    Gamma_gas = 0.4;
-% Determinar la calidad de disponibilidad para asegurar una Eb/N0=12 dB 
-% para QPSK. 
-Eb_N0 = 12;
-M     = 4;
+% Un servicio de radioenlace fijo en la banda de los 13 GHz.
+f = 13e9;
+lambda = 3e8/f;
+% El radioenlace está compuesto por dos vanos de 27 km y 19 km. 
+Distancia_total = 46;
+Distancia = [27 19]*1e3;
 
-Bn        = Rb_bps/(log2(M));
-Boltzman  = 1.381e-23;
-C_N0      = Eb_N0 + 10*log10(Rb_bps);
+% Teniendo en cuenta el plan de disposición de frecuencias correspondiente de la UIT (UIT-R F.497),
+% en el rango de frecuencias de trabajo, 12.75 - 13.25 GHz, se 
+BW_total = (13.25 -12.75)*1e9;
+% transmiten 8 canales con alternancia de polarizaciones. 
+% Las bandas de guarda a extremos son 15 y 23 MHz, y entre direcciones de 70 MHz.
+N =8;
+roll_off =1.4-1;
 
-Distancia = [11 6 14]*1e3;
-Lgas_dB   = Gamma_gas*Distancia/1000;
-Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
-Lb_dB     = Lgas_dB + Lbf_dB;
+% Las estaciones terminales transmiten 20 dBm de potencia. 
+Ptx_dBm = 20;
+% Las antenas de todas las estaciones presentan una ganancia de 39dB en polarización horizontal, 
+G_dB    = 39;
+% y se encuentran conectadas a través de un cable coaxial que presenta 4 dB de pérdidas. 
+Lt_dB = 4;
+Lt    = 10^(Lt_dB/10);
 
+MTTR = 5;
+MTBF = 10^5;
+%La figura de ruido de los receptores es 4,5 dB. La indisponibilidad total máxima es de 0,025%,
+% asumiendo que en cualquier estación se necesita al menos una C/N = 18 dB 
+F_receptor_dB = 4.5;
+f_receptor    = 10^(F_receptor_dB/10);
+U_total       =0.025;
+C_N_umbral    = 18;
+% 1) Calcular la velocidad binaria máxima que se puede ofrecer con el plan de frecuencias, 
+% si la modulación es QPSK y el factor del filtro es 1,4. 
+M =4;
+Boltzman    = 1.381e-23;
 
-T0 = 290;
-Lt = 10^(Lt_dB/10);
+Guarda_1               = 15e6;
+Separacion_direcciones = 70e6;
+Guarda_2               = 23e6;
 
-f_receptor   = 10^(F_receptor/10);
-T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1)
+% BW_total = Guarda_1 +(N-1)*Separacion_canal + Separacion_direcciones + (N-1)*Separacion_canal + Guarda_2;
+Separacion_canal = (BW_total - Separacion_direcciones - Guarda_1 - Guarda_2)/(2*(N-1))
+Rb_bps           = (Separacion_canal*log2(M))/(1+roll_off)
+% 2) Calcular el campo eléctrico que se recibe en cada vano en condiciones normales de propagación. 
+% Datos: Considerar como velocidad binaria la máxima posible y atenuador variable frente a desvanecimientos;
+% R0.01=35mm/h
 
-% Umbral_dBm   = C_N0 + 10*log10(T_despues_lt*Boltzman*Bn) +30;
-Umbral_dBw = Eb_N0 + 10*log10(Boltzman*T_despues_lt*Rb_bps) + Degradacion;
-Prx_dBw    = PIRE_dBw - Lb_dB + G_Pv_dB - Lt_dB 
+R_001 = 35;
+Bn    = Rb_bps/(log2(M));
 
-MD_dB     = Prx_dBw - Umbral_dBw
-Gamma_r   = K_lluvia* R_001^Alpha;
+T0           = 290;
+T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1);
+Umbral_dBm   = C_N_umbral + 10*log10(T_despues_lt*Boltzman*Bn) +30;
 
-Deff   = (Distancia*1e-3)./(0.477*((Distancia*1e-3).^0.633)*(R_001.^(0.073*Alpha))*((f*1e-9)^(0.123))-10.579*(1-exp(-0.024*(Distancia*1e-3)))); 
-F_001  = Gamma_r .* Deff;
+f = f/(1e9);Distancia =Distancia/1000;
 
-if((f*1e-9)>=10)
- C0 = 0.12+0.4*log10(((f*1e-9)/10)^0.8);
+K_lluvia = 0.03041;    
+Alpha    = 1.1586;     
+
+Gamma_r  = K_lluvia* R_001^Alpha; %dB/Km
+Deff     = (Distancia)./(0.477*(Distancia.^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia))); %Km
+F_001    = Gamma_r * Deff; % dB
+
+if(f>=10)
+ C0 = 0.12+0.4*log10((f/10)^0.8);
 else
  C0 = 0.12;    
 end
@@ -73,15 +73,28 @@ C1 = (0.07^C0)  * (0.12^(1-C0));
 C2 = (0.855*C0) + 0.5446*(1-C0);
 C3 = (0.139*C0) + 0.043* (1-C0);
 
-logaritmo = log10(MD_dB./(F_001*C1));
+q_total = U_total -(1.5 + 1.5)*MTTR/MTBF*100;
 
-for iteracion=1:3
-    soluciones(iteracion,:) = roots([C3 C2 logaritmo(iteracion)])
-    x(:,iteracion)  = max(soluciones(iteracion,:));
+numero_vanos = size(Distancia);
+iteraciones  = numero_vanos(1,2);
+
+for i = 1:iteraciones
+ q(i) = q_total*Distancia(i)/(sum(Distancia));
 end
-q_calculado = 10.^x;
 
-U_equipo = ((MTTR/MTBF)*100)*[1.5 1.5 2];
+Fq_dB =  F_001.*C1.*(q.^(-(C2+C3.*log10(q))))
+f     = f*(1e9);Distancia =Distancia*1000;
 
-U_total = q_calculado+U_equipo
-sum(U_total)
+gamma_gases = 0.4;
+Lgases_dB   = gamma_gases*Distancia/1000;
+
+Lgases = 10.^(Lgases_dB/10);
+Lbf_dB = 20*log10((4*pi*Distancia)/lambda);
+Lb     = Lbf_dB + Lgases_dB;
+Prx_dB = Ptx_dBm + G_dB - Lt_dB - Lb + G_dB - Lt_dB;
+
+PIRE_dBm = Umbral_dBm + Fq_dB + Lbf_dB -G_dB +Lt_dB ;
+PIRE_w   = 1e-3*10.^(PIRE_dBm/10);
+
+e     = sqrt(30*PIRE_w./(Distancia.^2));
+e_dBu = 20*log10(e/1e-6)

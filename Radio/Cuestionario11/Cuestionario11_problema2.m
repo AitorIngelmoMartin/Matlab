@@ -1,100 +1,92 @@
 clc;clear;
 
-% Un servicio de radioenlace fijo en la banda de los 13 GHz.
+% Se pretende diseñar una red de radioenlaces con la configuración 
+% representada en la figura adjunta que conecta tres estaciones terminales 
+% a partir de repetidores activos situados en el emplazamiento D.
+
+% La banda de trabajo seleccionada para ofrecer el servicio es 
+% 13GHz (12,75 – 13,25 GHz) y la separación entre canales es de 28MHz. 
+% Como primer paso del diseño se asume que todas las estaciones tienes
+% propiedades similares
+
 f = 13e9;
 lambda = 3e8/f;
-% El radioenlace está compuesto por dos vanos de 27 km y 19 km. 
-Distancia_total = 46;
-Distancia = [27 19]*1e3;
+% - Ganancia 36dB
+G_dB = 36;
+% - Polarización horizontal
 
-% Teniendo en cuenta el plan de disposición de frecuencias correspondiente de la UIT (UIT-R F.497),
-% en el rango de frecuencias de trabajo, 12.75 - 13.25 GHz, se 
+K_lluvia = 0.03041;
+Alpha    = 1.1586;
+% - Pérdidas en terminales 2dB
+Lt_dB = 2;
+% - CAG como mecanismo de protección frente a desvanecimientos
+% - Figura de ruido 8dB
+F_receptor = 8;
+% - MTTR=4h y MTBF=250.000h
+MTTR = 4;
+MTBF = 250000;
+% - CNR_ideal=10dB 
+CNR_ideal = 10;
+% - Capacidad de 20Mbps modulados en 16QAM con un filtro de coseno alzado 
+% con factor de roll-off 0,3 (degradación por el filtro de 1dB)
+Rb_bps = 20e6;
+M  = 16;
+roll_off = 0.3;
+% - Diagrama de radiación de la antena (azul para polarización horizontal, rojo para polarización vertical)
+% 1) Determinar el número de radiocanales que se puede ofrecer si ZS1=15MHz, ZS2=23MHz e YS=70MHz
 BW_total = (13.25 -12.75)*1e9;
-% transmiten 8 canales con alternancia de polarizaciones. 
-% Las bandas de guarda a extremos son 15 y 23 MHz, y entre direcciones de 70 MHz.
-N =8;
-roll_off =1.4-1;
-
-% Las estaciones terminales transmiten 20 dBm de potencia. 
-Ptx_dBm = 20;
-% Las antenas de todas las estaciones presentan una ganancia de 39dB en polarización horizontal, 
-G_dB    = 39;
-% y se encuentran conectadas a través de un cable coaxial que presenta 4 dB de pérdidas. 
-Lt_dB = 4;
-Lt    = 10^(Lt_dB/10);
-
-MTTR = 5;
-MTBF = 10^5;
-%La figura de ruido de los receptores es 4,5 dB. La indisponibilidad total máxima es de 0,025%,
-% asumiendo que en cualquier estación se necesita al menos una C/N = 18 dB 
-F_receptor_dB = 4.5;
-f_receptor    = 10^(F_receptor_dB/10);
-U_total       =0.025;
-C_N_umbral    = 18;
-% 1) Calcular la velocidad binaria máxima que se puede ofrecer con el plan de frecuencias, 
-% si la modulación es QPSK y el factor del filtro es 1,4. 
-M =4;
-Boltzman    = 1.381e-23;
-
+Separacion_canal = 28e6;
 Guarda_1               = 15e6;
 Separacion_direcciones = 70e6;
 Guarda_2               = 23e6;
 
 % BW_total = Guarda_1 +(N-1)*Separacion_canal + Separacion_direcciones + (N-1)*Separacion_canal + Guarda_2;
-Separacion_canal = (BW_total - Separacion_direcciones - Guarda_1 - Guarda_2)/(2*(N-1))
-Rb_bps           = (Separacion_canal*log2(M))/(1+roll_off)
-% 2) Calcular el campo eléctrico que se recibe en cada vano en condiciones normales de propagación. 
-% Datos: Considerar como velocidad binaria la máxima posible y atenuador variable frente a desvanecimientos;
-% R0.01=35mm/h
+N = (((BW_total - Separacion_direcciones - Guarda_1 - Guarda_2)/Separacion_canal) +2)/2
 
-R_001 = 35;
-Bn    = Rb_bps/(log2(M));
+% Rb_bps           = (Separacion_canal*log2(M))/(1+roll_off)
+% 2) Determinar la potencia a transmitir en cada vano del enlace A-C 
+% despreciando el efecto de las interferencias y la indisponibilidad por
+% equipos en dicho enlace
+Distancia = [28 23]*1e3;
+Boltzman  = 1.381e-23;
 
-T0           = 290;
-T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1);
-Umbral_dBm   = C_N_umbral + 10*log10(T_despues_lt*Boltzman*Bn) +30;
+T0 = 290;
+Lt = 10^(Lt_dB/10);
+Bn = Rb_bps/(log2(M));
 
-f = f/(1e9);Distancia =Distancia/1000;
+f_receptor   = 10^(F_receptor/10);
+T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(f_receptor-1)
 
-K_lluvia = 0.03041;    
-Alpha    = 1.1586;     
+Gamma_gases = 0.02;
+Lgases_dB   = Gamma_gases*Distancia/1000;
+Lbf_dB      = 20*log10((4*pi*Distancia)/lambda);
+Lb_dB       = Lbf_dB + Lgases_dB;
 
-Gamma_r  = K_lluvia* R_001^Alpha; %dB/Km
-Deff     = (Distancia)./(0.477*(Distancia.^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia))); %Km
-F_001    = Gamma_r * Deff; % dB
+Umbral_ideal_dBm = CNR_ideal  + 10*log10(T_despues_lt*Boltzman*Bn) + 30
+Degradacion =1;
+Umbral_real_dBm  = Umbral_ideal_dBm + Degradacion
+PIRE_dBm = Umbral_real_dBm + Lb_dB - G_dB + Lt_dB 
+Ptx_dBm  = PIRE_dBm - G_dB + Lt_dB 
 
-if(f>=10)
- C0 = 0.12+0.4*log10((f/10)^0.8);
-else
- C0 = 0.12;    
-end
+% 3) Comprobar la viabilidad del enlace A-B teniendo en cuenta el efecto 
+% sólo de las interferencias intrasistema cocanales y asumiendo que todas
+% las estaciones transmiten con 4dBm: demostrar que la potencia recibida 
+% en condiciones normales es mayor que el umbral en cada vano.
+Distancia = [28 14]*1e3;
 
-C1 = (0.07^C0)  * (0.12^(1-C0));
-C2 = (0.855*C0) + 0.5446*(1-C0);
-C3 = (0.139*C0) + 0.043* (1-C0);
+Ptx_dBm     = 4;
+Lgases_dB   = Gamma_gases*Distancia/1000;
+Lbf_dB      = 20*log10((4*pi*Distancia)/lambda);
+Lb_dB       = Lbf_dB + Lgases_dB;
 
-q_total = U_total -(1.5 + 1.5)*MTTR/MTBF*100;
+Prxn_dBm = Ptx_dBm + G_dB - Lt_dB - Lb_dB + G_dB - Lt_dB
 
-numero_vanos = size(Distancia);
-iteraciones  = numero_vanos(1,2);
+T_total = T0/Lt + T0*(Lt - 1)/Lt +  T0*(f_receptor - 1);
 
-for i = 1:iteraciones
- q(i) = q_total*Distancia(i)/(sum(Distancia));
-end
+% DATOS:
+% CIR            Degradación del umbral
+% CIR≥30dB               1dB
+% 20dB≤CIR<30dB          3dB
+% 10dB≤CIR<20dB          10dB
 
-Fq_dB =  F_001.*C1.*(q.^(-(C2+C3.*log10(q))))
-f     = f*(1e9);Distancia =Distancia*1000;
 
-gamma_gases = 0.4;
-Lgases_dB   = gamma_gases*Distancia/1000;
-
-Lgases = 10.^(Lgases_dB/10);
-Lbf_dB = 20*log10((4*pi*Distancia)/lambda);
-Lb     = Lbf_dB + Lgases_dB;
-Prx_dB = Ptx_dBm + G_dB - Lt_dB - Lb + G_dB - Lt_dB;
-
-PIRE_dBm = Umbral_dBm + Fq_dB + Lbf_dB -G_dB +Lt_dB ;
-PIRE_w   = 1e-3*10.^(PIRE_dBm/10);
-
-e     = sqrt(30*PIRE_w./(Distancia.^2));
-e_dBu = 20*log10(e/1e-6)

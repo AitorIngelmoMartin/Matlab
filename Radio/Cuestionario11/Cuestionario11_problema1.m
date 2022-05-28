@@ -1,101 +1,130 @@
 clc;clear;
 
-f = 23e9;
-lambda = 3e8/f;
+% Un radioenlace a 18 GHz implementado en torno a un puerto para manejar toda
+% la información que se genera en las actividades propias del puerto 
+% (vigilancia, transporte de mercancías,…), está compuesto por las 
+% estaciones terminales A y C y la estación nodal B. 
+% La indisponibilidad total del enlace es 0,015%.
 
-G_dB = 35;
+f       = 18e9;
+lambda  = 3e8/f;
+U_total = 0.015;
 
-Lt_dB = 1.5;
+% Las características de las estaciones A, B y C son las siguientes:
+
+M     = 16;
+Rb    = 16e6;
+G_dB  = 41.2;
+Lt_dB = 1.3;
 Lt    = 10^(Lt_dB/10);
 
-Grf_dB = 15;
-Grf    = 10^(Grf_dB/10);
+F_receptor_dB = 9;
+F_receptor    = 10^(F_receptor_dB/10);
+Boltzman      = 1.381e-23;
+Eb_No_ideal   = 12.5;
+Gamma_gases   = 0.06;
+K_lluvia      = 0.07078;
+Alpha         = 1.0818;
 
+MTBF = 7.5e5;
+MTTR = 6;
 
-figura_ruido_rf_dB = 10;
-figura_ruido_rf    = 10^(figura_ruido_rf_dB/10);
+Ptx_AB_dBm = 10.9;
+Ptx_BC_dBm = 27.1;
 
-L_mezclador_dB = 3;
-L_mezclador    = 10^(L_mezclador_dB/10);
+% El reparto de indisponibilidad por lluvia puede asignarse proporcionalmente
+% directa a la longitud de cada vano. 
+% En el mismo escenario existe otro radioenlace ED que reutiliza las misma 
+% frecuencias que el radioenlace de interés AC.
 
-Gfi_dB = 20;
-Gfi    = 10^(Gfi_dB/10);
+% Se pide determinar la potencia máxima de la estación D en condiciones de 
+% no desvanecimiento para mantener la viabilidad del sistema en términos de 
+% interferencia cocanal en la estación C. Considerar que los parámetros de 
+% la estación D son iguales que los de las estaciones A, B y C.
+% Datos:
 
-figura_ruido_fi_dB = 20;
-figura_ruido_fi    = 10^(figura_ruido_fi_dB/10);
+R_001 = 34;
 
-gamma_gases  = 0.5;
-Eb_N0        = 13;
-degradacion  = 6 + 1;
-roll_off     = 0.4;
-Rb           = 50e6;
-R_001        = 27;
-alpha        = 1.0214;
-k            = 0.1286;
+% 1)INDISPONIBILIDAD DE EQUIPOS EN CADA VANO
+Distancia     = [10 21]*1000;
+U_equipos     = 2*(MTTR/MTBF)*100;
+Distancia_D_C = sqrt(7^2+5^2)*1e3;;
+% 2)INDISPONIBILIDAD DE LLUVIA EN CADA VANO
+q_total = U_total -((2+2)*(MTTR/MTBF)*100);
 
-MTTR = 20;
-MTBF = 1e6;
+numero_vanos = size(Distancia);
+iteraciones  = numero_vanos(1,2);
 
-MD_vano1  = 35;
-Distancia = [24 15]*1e3;
-K         = 1.381e-23;
+for i = 1:iteraciones
+ q(i) = q_total*Distancia(i)/(sum(Distancia));
+end
 
-T_antena = 350;
-T0       = 290;
+% 3)MD en el vano BC
+f=f/1e9;Distancia = Distancia/1000;
 
-T_total = T_antena/Lt + T0*(Lt-1)/Lt + T0*(figura_ruido_rf-1) + T0*(L_mezclador-1)/Grf + T0*(figura_ruido_fi-1)*L_mezclador/Grf;
+Gamma_r  = K_lluvia* R_001^Alpha; %dB/Km
+Deff     = (Distancia)./(0.477*(Distancia.^0.633)*(R_001^(0.073*Alpha))*(f^(0.123))-10.579*(1-exp(-0.024*Distancia))); %Km
+F_001    = Gamma_r * Deff; % dB
 
-Lgases_dB = gamma_gases*Distancia/1000;
-Lbf_dB    = 20*log10(4*pi*Distancia/lambda);
-Lb_dB     = Lbf_dB+Lgases_dB;
-
-Umbral=Eb_N0+10*log10(K*T_total*Rb)+degradacion+30;
-
-PIRE_dBm = Umbral + Lb_dB - G_dB + Lt_dB ;
-Ptx_dBm  = PIRE_dBm + Lt_dB - G_dB;
-
-R_001_alpha = R_001^alpha;
-gamma_R     = k*R_001_alpha; 
-
-Deff=(0.477*(Distancia*1e-3).^0.633*R_001^(0.073*alpha)*(f*1e-9)^0.123)-(10.579*(1-exp(-0.024*(Distancia*1e-3))));
-
-if Deff<0.4
-     Lef=(Distancia.*1e-3)*2.5;
+if(f>=10)
+ C0 = 0.12+0.4*log10((f/10)^0.8);
 else
-     Lef=(Distancia.*1e-3)./Deff;
+ C0 = 0.12;    
 end
 
-F_001=gamma_R*Lef;
+C1 = (0.07^C0)  * (0.12^(1-C0));
+C2 = (0.855*C0) + 0.5446*(1-C0);
+C3 = (0.139*C0) + 0.043* (1-C0);
 
-if (f*1e-9)>=10
-     C0=0.12+0.4*log10(((f*1e-9)/10)^0.8);
-else
-     C0=0.12;
-end
+Fq_dB =  F_001.*C1.*(q.^(-(C2+C3.*log10(q))));
 
-C1 = (0.07^C0)*(0.12^(1-C0));
-C2 = 0.855*C0+0.546*(1-C0);
-C3 = 0.139*C0+0.043*(1-C0);
+f=f*1e9;Distancia = Distancia*1000;
 
-% MD mínimo cuando q=1%
-MDmin=F_001*C1*1^(-C2-C3*log10(1));
+% 4)Umbral real
+MD       = Fq_dB;
+Ptx_dBm  = [Ptx_AB_dBm Ptx_BC_dBm];
+PIRE_dBm = Ptx_dBm +G_dB -Lt_dB;
 
-% MD máximo cuando q=0.001%
-MDmax=F_001*C1*0.001^(-C2-C3*log10(0.001));
+Lgases_dB   = Gamma_gases*Distancia/1000;
+Lgases      = 10.^(Lgases_dB/10);
+Lbf_dB      = 20*log10((4*pi*Distancia)/lambda);
 
-for iteracion=1:2
-    if MD_vano1>MDmin(iteracion)
-        if MD_vano1<MDmax
-            solucion=roots([C3 C2 log10(MD_vano1./(F_001(iteracion)*C1))]);
-            q(:,iteracion)=10^(max(solucion));
-        else
-            q=0.001;
-        end
-    else
-        q=Inf;
-    end
-end
-Ueq         = 1.5*100*(MTTR/MTBF);
-Utotalvano1 = Ueq+q;
+Lb_dB = Lgases_dB + Lbf_dB;
 
-Utotal = sum(Utotalvano1);
+Umbral_real_dBm    = PIRE_dBm -Lb_dB + G_dB - Lt_dB - MD + G_dB - Lt_dB
+
+T0 = 290;
+T_despues_lt = T0*(1/Lt) + T0*(Lt-1)*(1/Lt) + T0*(F_receptor-1)
+
+Bn = Rb/log2(M);
+% Prx_dBm  = Ptx_dBm - Lb_dB + (numero_vanos(1,2)+1)*( G_dB - Lt_dB)
+Prx_BC_dBm =  Ptx_BC_dBm +G_dB - Lt_dB - Lb_dB(2) + G_dB - Lt_dB
+Umbral_real_dBm  = Prx_BC_dBm - MD(2)
+Umbral_ideal_dBm = Eb_No_ideal  + 10*log10(T_despues_lt*Boltzman*Rb) + 30
+
+% INTERFERENCIA ESTACION B -> A
+D1_B = 20; %Es la potencia con la que sale f2, la del vano AB.
+Interferencia_B_dBm = Ptx_AB_dBm + G_dB - Lt_dB - D1_B - Lb_dB(2) + G_dB - Lt_dB;
+% Como todo es comolar, la XPD no se tiene en cuenta. Como concide con la
+% direccion de máxima radiacion de C, no hay discriminación de entrada.
+
+% INTERFERENCIA ESTACION D
+Distancia_DC   = sqrt( (5*5) +(7*7) );
+Alfa_salida_D  = acosd(7/Distancia_DC);
+Alfa_llegada_C = acosd(5/Distancia_DC);
+
+D1_D = 14;
+D2_D = 20;
+
+Incremento_Degradacion_umbral = Umbral_real_dBm - Umbral_ideal_dBm
+
+CIR = (Incremento_Degradacion_umbral+3)/0.47
+
+Interferenccia_total = Prx_BC_dBm -  CIR ;
+Interferencia_D      = 10^(Interferenccia_total/10) - (10^(Interferencia_B_dBm/10));
+Interferencia_D_dBm  = 10*log10(Interferencia_D);
+
+Lb_D_E_dB  = Gamma_gases*Distancia_D_C/1000 + 20*log10((4*pi*Distancia_D_C)/lambda);
+ 
+Ptx_D      = Interferencia_D_dBm -(G_dB - Lt_dB - D1_D - Lb_D_E_dB + G_dB - Lt_dB - D2_D)
+% 34,57dBm
