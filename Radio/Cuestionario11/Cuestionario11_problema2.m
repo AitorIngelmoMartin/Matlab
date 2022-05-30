@@ -68,25 +68,40 @@ Umbral_real_dBm  = Umbral_ideal_dBm + Degradacion
 PIRE_dBm = Umbral_real_dBm + Lb_dB - G_dB + Lt_dB 
 Ptx_dBm  = PIRE_dBm - G_dB + Lt_dB 
 
-% 3) Comprobar la viabilidad del enlace A-B teniendo en cuenta el efecto 
-% sólo de las interferencias intrasistema cocanales y asumiendo que todas
-% las estaciones transmiten con 4dBm: demostrar que la potencia recibida 
-% en condiciones normales es mayor que el umbral en cada vano.
-Distancia = [28 14]*1e3;
 
-Ptx_dBm     = 4;
-Lgases_dB   = Gamma_gases*Distancia/1000;
-Lbf_dB      = 20*log10((4*pi*Distancia)/lambda);
-Lb_dB       = Lbf_dB + Lgases_dB;
-
-Prxn_dBm = Ptx_dBm + G_dB - Lt_dB - Lb_dB + G_dB - Lt_dB
-
-T_total = T0/Lt + T0*(Lt - 1)/Lt +  T0*(f_receptor - 1);
-
-% DATOS:
 % CIR            Degradación del umbral
 % CIR≥30dB               1dB
 % 20dB≤CIR<30dB          3dB
 % 10dB≤CIR<20dB          10dB
 
+Distancia = [28 14 23]*1e3;
+Distancia_inteferencias = [33 35]*1e3;
+Lbf_interferencia_dB    = 20*log10((4*pi*Distancia_inteferencias)/lambda);
+Lgases_interferencia_dB = Gamma_gases*Distancia_inteferencias/1000;
 
+Lgases_dB   = Gamma_gases*Distancia/1000;
+Lbf_dB      = 20*log10((4*pi*Distancia)/lambda);
+Lb_dB       = Lbf_dB + Lgases_dB;
+Ptx_dBm     = 4;
+
+Prx_dBm = Ptx_dBm + G_dB - Lt_dB - Lb_dB + G_dB - Lt_dB
+
+T_total = T0/Lt + T0*(Lt - 1)/Lt +  T0*(f_receptor - 1);
+% INTERFERNECIA EN D
+Interferencia_D_B = Ptx_dBm +  G_dB - Lt_dB - Lbf_dB(2) - Lgases_dB(2) - 67 +  G_dB - Lt_dB
+Interferencia_D_C = Ptx_dBm +  G_dB - Lt_dB - Lbf_dB(3) - Lgases_dB(3) - 67 +  G_dB - Lt_dB
+
+Interfernecia_B_total = 10^(Interferencia_D_B/10) + 10^(Interferencia_D_C/10);
+CIR_D = Prx_dBm(1) - 10*log10(Interfernecia_B_total)
+
+
+% INTERFERNECIA EN B
+Interferencia_B_D1 = Ptx_dBm +  G_dB - Lt_dB - 67 - Lb_dB(2) +  G_dB - Lt_dB
+Interferencia_B_D2 = Ptx_dBm +  G_dB - Lt_dB - 67 - Lb_dB(2) +  G_dB - Lt_dB
+
+Interfernecia_B_total = 10^(Interferencia_B_D1/10) + 10^(Interferencia_B_D2/10);
+CIR_B = Prx_dBm(2) - 10*log10(Interfernecia_B_total)
+
+% UMBRAL REAL EN LOS VANOS A-D Y D-B
+
+Umbral_real_CIR_dBm = Umbral_real_dBm + 1

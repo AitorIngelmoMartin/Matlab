@@ -74,11 +74,17 @@ Lgases_dB   = gamma_gases*Distancia/1000;
 Lbf_dB      = 20*log10((4*pi*Distancia)/lambda);
 Lb_dB = Lbf_dB + Lgases_dB;
 
-PIRE_dBm = Umbral_real_dBm + Lb_dB - G_dB + Lt_dB - G_dB + Lt_dB;;
-Ptx_dBm  = PIRE_dBm - G_dB + Lt_dB;
+PIRE_dBm = Umbral_real_dBm + Lb_dB - G_dB + Lt_dB;
+Ptx_dBm = PIRE_dBm - G_dB + Lt_dB;
+
 
 % 3) Comprobar la viabilidad del enlace A-B teniendo en cuenta el efecto sólo de las interferencias intrasistema cocanales y asumiendo que todas las estaciones transmiten con 4dBm: demostrar que la potencia recibida en condiciones normales es mayor que el umbral en cada vano.
 
+% DATOS:
+% CIR                                 Degradación del umbral
+% CIR≥30dB                      1dB
+% 20dB≤CIR<30dB          3dB
+% 10dB≤CIR<20dB          10dB
 
 % PRX EN LOS VANOS DESEADOS A-->D Y D-->B
 Ptx_dBm = 4; 
@@ -93,7 +99,7 @@ D_DCsalida = 67;
 %NODO D (A-->D):
 
 I_BD = Ptx_dBm - Lt_dB + G_dB - D_DAsalida - Lb_dB(3) + G_dB - Lt_dB;
-I_CD = Ptx_dBm - Lt_dB + G_dB - D_DCsalida -Lb_dB(2) + G_dB - Lt_dB;
+I_CD = Ptx_dBm - Lt_dB + G_dB - D_DCsalida - Lb_dB(2) + G_dB - Lt_dB;
 
 ItotalAB = 10^(I_BD/10) + 10^(I_CD/10);
 ItotalAB = 10*log10(ItotalAB);
@@ -111,4 +117,3 @@ ItotalDB = 10^(I_AB/10) + 10^(I_CB/10);
 ItotalDB = 10*log10(ItotalDB);
 
 CIR_DB = Prxn_dBm(3) - ItotalDB;
-

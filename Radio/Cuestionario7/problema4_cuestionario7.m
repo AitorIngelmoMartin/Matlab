@@ -3,15 +3,13 @@ clear;close all;clc;
 
 F_ll = 19;
 f  = 11.2e9;
-c  = 3e8;
 R0 = 6370000;
 K  = 0.55; %Tabulando a casi 20
 q  = 0.005;
-lambda    = c/f;
-Distancia=14000;
-Lbf_dB = 20*log10((4*pi*Distancia)/lambda);
+lambda    = 3e8/f;
+Distancia = 14000;
+Lbf_dB    = 20*log10((4*pi*Distancia)/lambda);
 Distancia = 14; % Km
-
 
 f       = f/(1e9);
 q       = 0.005;
@@ -33,7 +31,7 @@ termino1 = 0.477*(Distancia^0.633)*(R_001^(0.073*Alpha_PH))*(f^(0.123));
 termino2 = 10.579*(1-exp(-0.024*Distancia));
 Deff     = (Distancia)/(termino1-termino2) %Km
 
-F_001_PH    =   Gamma_PH * Deff % dB
+F_001_PH =   Gamma_PH * Deff % dB
 % Almenos en una hora al año, la lluvia va a probocar una atenuación
 % mayor que F_001 en dB.
 
@@ -65,8 +63,7 @@ elseif (f>20 && f<=35)
     V = 22.6;
 end
 
-XPD_ll = U - V*log10(Fq_PH);
-
+XPD_ll    = U - V*log10(Fq_PH);
 Lgases_dB = 0.0160*Distancia;
 XPD_dB    = 0--40;
 

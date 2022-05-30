@@ -121,7 +121,7 @@ end
             
     end
 
-    Lad_dB = L1_dB + Lp2_dB - Tc;
+    Lad_dB = L1_dB + Lp2_dB - Tc
 
 
 
