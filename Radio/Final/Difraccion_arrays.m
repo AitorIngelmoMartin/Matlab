@@ -1,18 +1,16 @@
 clc;clear;
 
-f  = 23e9;
+f  = 25e9;
 R0 = 6370000;
 K  = 4/3;
 Re = K*R0;
 
-h1 = 332;
-h2 = 328;
-Distancia = 38e3;
+Distancia = 17e3;
 lambda    = 3e8/f;
 
-e  = [150 261 239 200];
-a  = [150 0 0 40];
-d1 = [0 15e3 29e3 Distancia];
+e  = [252  396 642 855];
+a  = [40   0   0  57.4];
+d1 = [0 3e3 10e3 Distancia];
 d2 = Distancia - d1;
 
 flecha        = d1.*d2/(2*Re);
@@ -24,15 +22,16 @@ uve = sqrt(2)*despejamiento./R1;
 uve(:,1)   =[];
 uve(:,end) =[];
 
-
-
 if((uve(1)<=-0.78) && (uve(2)>-0.78))
     "El obstáculo uno no interviene"
-    Lad=6.9+20*log10(sqrt(((uve(3)-0.1)^2)+1)+uve(3)-0.1);
+    Lad=6.9+20*log10(sqrt(((uve(2)-0.1)^2)+1)+uve(2)-0.1)
 end
 if((uve(2)<=-0.78) && (uve(1)>-0.78))
     "El obstáculo dos no interviene"
-    Lad=6.9+20*log10(sqrt(((uve(2)-0.1)^2)+1)+uve(2)-0.1);
+    Lad=6.9+20*log10(sqrt(((uve(1)-0.1)^2)+1)+uve(1)-0.1)
+end
+if((uve(2)<=-0.78) && (uve(1)<=-0.78))
+    "No hay pérdidas, los dos obstaculos tienen V <-0.78"
 end
 
 if( (((uve(1)<0) ||(uve(2)<0) ) && (abs(uve(1) -uve(2))<0.5)) || (((uve(1)>0) && (uve(2)>0) ) && (abs(uve(1) -uve(2))<0.5)) )    "Método uno, obstáculos parecidos" 

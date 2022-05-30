@@ -32,7 +32,7 @@ termino2 = 10.579*(1-exp(-0.024*Distancia));
 Deff     = (Distancia)/(termino1-termino2) %Km
 
 F_001_PH =   Gamma_PH * Deff % dB
-% Almenos en una hora al año, la lluvia va a probocar una atenuación
+% Almenos en una hora al año, la lluvia va a provocar una atenuación
 % mayor que F_001 en dB.
 
 if(f>=10)
