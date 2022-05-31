@@ -50,7 +50,8 @@ Distancia     = [10 21]*1000;
 U_equipos     = 2*(MTTR/MTBF)*100;
 Distancia_D_C = sqrt(7^2+5^2)*1e3;;
 % 2)INDISPONIBILIDAD DE LLUVIA EN CADA VANO
-q_total = U_total -((2+2)*(MTTR/MTBF)*100);
+equipos = [2 2];
+q_total = U_total -((sum(equipos))*(MTTR/MTBF)*100);
 
 numero_vanos = size(Distancia);
 iteraciones  = numero_vanos(1,2);
